@@ -1,13 +1,9 @@
 <?php
-require_once("databases/database_partite/Mysingleton.php");
-$connection = Mysingleton::getInstance();
-$query_risultati = "SELECT * FROM Risultati";
-$sth_risultati = $connection->prepare($query_risultati);
-$sth_risultati->execute();
-
-$query_squadre = "SELECT id_squadra, nome FROM Squadre";
-$sth_squadre = $connection->prepare($query_squadre);
-$sth_squadre->execute();
+session_start();
+if (!isset($_SESSION['invalid_account'])) {
+  $_SESSION['invalid_account'] = 0;
+}
+//session_destroy();
 ?>
 
 
@@ -58,11 +54,17 @@ $sth_squadre->execute();
           <div class="ml-auto">
             <nav class="site-navigation position-relative text-right" role="navigation">
               <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
-                <li class="active"><a href="index.html">Home</a></li>
-                <li><a href="#">Eventi</a></li>
-                <li><a href="#">---</a></li>
-                <li><a href="#">---</a></li>
-                <li><a href="pages/login_registrazione/login.php">Log-in</a></li>
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="pages/selezione_evento/evento.php">Eventi</a></li>
+                <li><a href="pages/serie_a/classifica.php">Classifica Serie A 2023/2024</a></li>
+                <li><a href="pages/serie_a/highlights.php">Highlights Serie A 2023/2024</a></li>
+                <?php
+                if ($_SESSION['invalid_account'] == 1) {
+                  echo '<li class="active"><a href="#" class="nav-link">Profilo utente</a></li>';
+                } else {
+                  echo '<li><a href="pages/login_registrazione/login.php">Log-in</a></li>';
+                }
+                ?>
               </ul>
             </nav>
 
@@ -78,10 +80,9 @@ $sth_squadre->execute();
         <div class="row align-items-center">
           <div class="col mx-auto text-center">
             <h1 class="text-purple">Gestione trasferte Fiorentina</h1>
-            <div id="date-countdown"></div>
-            <p>
-              <a href="pages/login_registrazione/login.php" class="btn btn-primary py-3 px-4 mr-3">Compra un biglietto</a>
-              <a href="#highlights" class="btn btn-primary py-3 px-4 mr-3">Highlights Serie A 23/24</a>
+            <p class="mt-5">
+              <a href="#trasferte" class="btn btn-primary py-3 px-4 mr-3">Trasferte principali</a>
+              <a href="#notizie" class="btn btn-primary py-3 px-4 mr-3">Ultime notizie</a>
             </p>
           </div>
         </div>
@@ -134,9 +135,9 @@ $sth_squadre->execute();
 
     <div class="trasferte-principali">
       <div class="container">
-        <div class="row">
+        <div class="row" id="trasferte">
           <div class="col-12 title-section">
-            <h2 class="heading">Trasferte principali</h2>
+            <h2 class="heading"><a href="#" class="text-white">Trasferte principali</a></h2>
           </div>
         </div>
         <div class="row no-gutters">
@@ -210,12 +211,12 @@ $sth_squadre->execute();
 
     <div class="site-section bg-dark">
       <div class="container">
-        <div class="row">
+        <div class="row d-flex justify-content-center">
+          <div class="col-12 title-section">
+            <h2 class="heading"><a href="#" class="text-white">Evento imminente</a></h2>
+          </div>
           <div class="col-lg-6">
             <div class="widget-next-match" style="background-image:url(images/conference.png)">
-              <div class="widget-title">
-                <h3>Prossima partita</h3>
-              </div>
               <div class="widget-body mb-3">
                 <div class="widget-vs">
                   <div class="d-flex align-items-center justify-content-around justify-content-between w-100">
@@ -240,154 +241,22 @@ $sth_squadre->execute();
 
               <div class="text-center widget-vs-contents mb-4">
                 <h4><b>Conference League</b></h4>
-                <p class="mb-5 pt-2 pb-3" style="background-color:red;">
+                <p class="mb-5 pt-2 pb-3">
                   <span class="d-block text-white"><b>29 Maggio 2024</b></span>
                   <span class="d-block text-white"><b>21:00 CET</b></span>
                   <strong class="text-white">AEK Arena, Atene</strong>
                 </p>
-
-                <div id="date-countdown2" class="pb-1"></div>
               </div>
             </div>
           </div>
-          <div class="col-lg-6">
-
-            <div class="widget-next-match">
-              <table class="table custom-table">
-                <thead>
-                  <tr>
-                    <th>P</th>
-                    <th>Team</th>
-                    <th>W</th>
-                    <th>D</th>
-                    <th>L</th>
-                    <th>PTS</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td><strong class="text-white">Football League</strong></td>
-                    <td>22</td>
-                    <td>3</td>
-                    <td>2</td>
-                    <td>140</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td><strong class="text-white">Soccer</strong></td>
-                    <td>22</td>
-                    <td>3</td>
-                    <td>2</td>
-                    <td>140</td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td><strong class="text-white">Juvendo</strong></td>
-                    <td>22</td>
-                    <td>3</td>
-                    <td>2</td>
-                    <td>140</td>
-                  </tr>
-                  <tr>
-                    <td>4</td>
-                    <td><strong class="text-white">French Football League</strong></td>
-                    <td>22</td>
-                    <td>3</td>
-                    <td>2</td>
-                    <td>140</td>
-                  </tr>
-                  <tr>
-                    <td>5</td>
-                    <td><strong class="text-white">Legia Abante</strong></td>
-                    <td>22</td>
-                    <td>3</td>
-                    <td>2</td>
-                    <td>140</td>
-                  </tr>
-                  <tr>
-                    <td>6</td>
-                    <td><strong class="text-white">Gliwice League</strong></td>
-                    <td>22</td>
-                    <td>3</td>
-                    <td>2</td>
-                    <td>140</td>
-                  </tr>
-                  <tr>
-                    <td>7</td>
-                    <td><strong class="text-white">Cornika</strong></td>
-                    <td>22</td>
-                    <td>3</td>
-                    <td>2</td>
-                    <td>140</td>
-                  </tr>
-                  <tr>
-                    <td>8</td>
-                    <td><strong class="text-white">Gravity Smash</strong></td>
-                    <td>22</td>
-                    <td>3</td>
-                    <td>2</td>
-                    <td>140</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="site-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-6 title-section" id="highlights">
-            <h2 class="heading">Highlights Serie A TIM 2023/2024</h2>
-          </div>
-          <div class="col-6 text-right">
-            <div class="custom-nav">
-              <a href="#" class="js-custom-prev-v2"><span class="icon-keyboard_arrow_left"></span></a>
-              <span></span>
-              <a href="#" class="js-custom-next-v2"><span class="icon-keyboard_arrow_right"></span></a>
-            </div>
-          </div>
-        </div>
-        <div class="owl-4-slider owl-carousel">
-          <?php
-          while ($row_risultato = $sth_risultati->fetch(PDO::FETCH_OBJ)) {
-            $squadra_casa = "";
-            $squadra_ospite = "";
-            $sth_squadre->execute();
-            while ($row_squadra = $sth_squadre->fetch(PDO::FETCH_OBJ)) {
-              if ($row_risultato->id_squadra_casa == $row_squadra->id_squadra) {
-                $squadra_casa = $row_squadra->nome . " " . $row_risultato->numero_goal_casa;
-              } else if ($row_risultato->id_squadra_ospite == $row_squadra->id_squadra) {
-                $squadra_ospite = $row_squadra->nome . " " . $row_risultato->numero_goal_ospite;
-              }
-            }
-            echo "  <div class='item'>
-                      <div class='video-media'>
-                        <img src='$row_risultato->image_partita' alt='Image' class='img-carousel'>
-                        <a href='$row_risultato->link_highlights' class='d-flex play-button align-items-center' data-fancybox>
-                          <span class='icon mr-3'>
-                            <span class='icon-play'></span>
-                          </span>
-                            <div class='caption'>
-                              <h3><b>$squadra_casa<br>$squadra_ospite</b></h3>
-                            </div>
-                        </a>
-                      </div>
-                    </div>";
-          }
-          ?>
         </div>
       </div>
     </div>
 
     <div class="container site-section">
-      <div class="row">
+      <div class="row" id="notizie">
         <div class="col-6 title-section">
-          <h2 class="heading">Notizie principali</h2>
+          <h2 class="heading"><a href="#" class="text-white">Notizie principali</a></h2>
         </div>
       </div>
       <div class="row">
@@ -479,7 +348,7 @@ $sth_squadre->execute();
     </footer>
 
   </div>
-  <!-- .site-wrap -->
+
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/jquery-ui.js"></script>
@@ -499,3 +368,19 @@ $sth_squadre->execute();
 </body>
 
 </html>
+
+<?php
+function stampaDati($count, $row_squadra)
+{
+  echo "     
+    <td>" . $count . "</td>
+    <td>" . $row_squadra->nome . "</td>
+    <td>" . $row_squadra->partite_giocate . "</td>
+    <td>" . $row_squadra->vittorie . "</td>
+    <td>" . $row_squadra->pareggi . "</td>
+    <td>" . $row_squadra->sconfitte . "</td>
+    <td>" . $row_squadra->goal_fatti . "</td>
+    <td>" . $row_squadra->goal_subiti . "</td>
+    <td>" . $row_squadra->numero_punti . "</td>";
+}
+?>

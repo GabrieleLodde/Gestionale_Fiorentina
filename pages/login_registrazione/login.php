@@ -1,3 +1,9 @@
+<?php
+session_start();
+if(!isset($_SESSION['invalid_account'])){
+  $_SESSION['invalid_acount'] = 0;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +11,7 @@
   <title>Pagina log-in</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="icon" type="image/x-icon" href="images/logo.png">
+  <link rel="icon" type="image/x-icon" href="../../images/logo.png">
 
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Orbitron&family=Freeman&family=Sedan+SC&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../fonts/icomoon/style.css">
@@ -21,7 +27,10 @@
   <link rel="stylesheet" href="../../css/style.css">
 </head>
 
-<body>
+<body <?php
+      if ($_SESSION["invalid_account"] == -1) {
+      ?> onload="printInvalidAccount()" <?php
+                                  }?>>
   <div class="site-wrap">
 
     <div class="site-mobile-menu site-navbar-target">
@@ -47,10 +56,10 @@
             <nav class="site-navigation position-relative text-right" role="navigation">
               <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
                 <li><a href="../../index.php" class="nav-link">Home</a></li>
-                <li><a href="#" class="nav-link">Eventi</a></li>
-                <li><a href="#" class="nav-link">---</a></li>
-                <li><a href="#" class="nav-link">---</a></li>
-                <li class="active"><a href="#" class="nav-link">Log-in</a></li>
+                <li><a href="../selezione_evento/evento.php" class="nav-link">Eventi</a></li>
+                <li><a href="../serie_a/classifica.php">Classifica Serie A 2023/2024</a></li>
+                <li><a href="../serie_a/highlights.php">Highlights Serie A 2023/2024</a></li>
+                <li class="active"><a href="registrazione.php" class="nav-link">Registrazione</a></li>
               </ul>
             </nav>
 
@@ -65,7 +74,7 @@
       <div class="container">
         <div class="row align-items-center">
           <div class="col-lg-9 mx-auto text-center">
-            <h1>Log-in utente</h1>
+            <h1 class="text-purple">Log-in utente</h1>
           </div>
         </div>
       </div>
@@ -92,7 +101,7 @@
           </div>
           <div class="col-lg-4 ml-auto">
             <div class="img mb-4">
-              <a href="../../images/curva_viola.jpg"><img src="../../images/curva_viola.jpg" alt="Image" class="img-base"></a>
+              <a target="_blank" href="../../images/curva_viola.jpg"><img src="../../images/curva_viola.jpg" alt="Image" class="img-base"></a>
             </div>
           </div>
         </div>
@@ -157,7 +166,7 @@
     </footer>
 
   </div>
-  <!-- .site-wrap -->
+
   <script src="../../js/jquery-3.3.1.min.js"></script>
   <script src="../../js/jquery-migrate-3.0.1.min.js"></script>
   <script src="../../js/jquery-ui.js"></script>
@@ -174,5 +183,13 @@
   <script src="../../js/jquery.mb.YTPlayer.min.js"></script>
 
   <script src="../../js/main.js"></script>
-</body>
+  <script>
+    function printInvalidAccount() {
+      alert("Credenziali non valide!");
+      <?php
+      $_SESSION["invalid_account"] = 0;
+      ?>
+    }
+  </script>
+</>
 </html>

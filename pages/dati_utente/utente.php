@@ -1,15 +1,15 @@
 <?php
-session_start();
-if (!isset($_SESSION["invalid_CF"])) {
-  $_SESSION["invalid_CF"] = true;
-}
+//gestione profilo utente
+//sloggarsi (uscita sessione)
+//eliminare account (eliminazione account)
+//visualizzare pagina con query string composta da: url + id_utente --> per visualizzare i dati di un utente (in sessione)
+//questa pagina deve essere vista solo se $_SESSION["invalid_account"] == 1
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <title>Pagina registrazione</title>
+  <title>Pagina utente</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="icon" type="image/x-icon" href="../../images/logo.png">
@@ -28,11 +28,7 @@ if (!isset($_SESSION["invalid_CF"])) {
   <link rel="stylesheet" href="../../css/style.css">
 </head>
 
-<body <?php
-      if ($_SESSION["invalid_CF"] == false) {
-      ?> onload="printInvalidCF()" <?php
-                                  }
-                                    ?>>
+<body>
   <div class="site-wrap">
 
     <div class="site-mobile-menu site-navbar-target">
@@ -46,6 +42,7 @@ if (!isset($_SESSION["invalid_CF"])) {
 
 
     <header class="site-navbar py-4" role="banner">
+
       <div class="container">
         <div class="d-flex align-items-center">
           <div class="site-logo">
@@ -60,20 +57,22 @@ if (!isset($_SESSION["invalid_CF"])) {
                 <li><a href="../selezione_evento/evento.php" class="nav-link">Eventi</a></li>
                 <li><a href="../serie_a/classifica.php">Classifica Serie A 2023/2024</a></li>
                 <li><a href="../serie_a/highlights.php">Highlights Serie A 2023/2024</a></li>
-                <li class="active"><a href="login.php" class="nav-link">Log-in</a></li>
+                <li class="active"><a href="#" class="nav-link">Profilo Utente</a></li>
               </ul>
             </nav>
+
             <a href="#" class="d-inline-block d-lg-none site-menu-toggle js-menu-toggle text-black float-right text-white"><span class="icon-menu h3 text-white"></span></a>
           </div>
         </div>
       </div>
+
     </header>
 
     <div class="hero overlay" style="background-image: url('../../images/coreografia_sfondo.jpg');">
       <div class="container">
         <div class="row align-items-center">
           <div class="col-lg-9 mx-auto text-center">
-            <h1 class="text-purple">Registrazione utente</h1>
+            <h1 class="text-purple">Profilo utente</h1>
           </div>
         </div>
       </div>
@@ -84,32 +83,17 @@ if (!isset($_SESSION["invalid_CF"])) {
           <div class="col-lg-7">
             <form action="checkInput.php" method="post">
               <div class="form-group">
-                <input type="text" name="codice_fiscale" maxlength="16" placeholder="Codice fiscale" onkeyup="this.value = this.value.toUpperCase();" class="form-control" required>
+                <input type="email" name="email_login" placeholder="Email" class="form-control" required>
               </div>
               <div class="form-group">
-                <input type="text" name="nome" placeholder="Nome" class="form-control" required>
+                <input type="password" name="password_login" placeholder="Password" class="form-control" required>
               </div>
               <div class="form-group">
-                <input type="text" name="cognome" placeholder="Cognome" class="form-control" required>
+                <input type="submit" value="Log-in" class="btn btn-primary py-3 px-5">
+                <input type="reset" value="Annulla log-in" class="btn btn-primary py-3 px-5">
               </div>
               <div class="form-group">
-                <input type="text" name="nazionalita" placeholder="Nazionalità" class="form-control" required>
-              </div>
-              <div class="form-group">
-                <input type="date" name="data_nascita" min="1900-01-01" max="2024-05-01" placeholder="Data di nascita" class="form-control" required>
-              </div>
-              <div class="form-group">
-                <input type="email" name="email" placeholder="Email" class="form-control" required>
-              </div>
-              <div class="form-group">
-                <input type="password" name="password" placeholder="Password" class="form-control" required>
-              </div>
-              <div class="form-group">
-                <input type="submit" value="Registrati" class="btn btn-primary py-3 px-5">
-                <input type="reset" value="Annulla registrazione" class="btn btn-primary py-3 px-5">
-              </div>
-              <div class="form-group">
-                Hai già effettuato la registrazione? <a href="login.php">Clicca qui </a>
+                Non hai effettuato la registrazione? <a href="registrazione.php">Clicca qui</a>
               </div>
             </form>
           </div>
@@ -180,7 +164,7 @@ if (!isset($_SESSION["invalid_CF"])) {
     </footer>
 
   </div>
-  
+
   <script src="../../js/jquery-3.3.1.min.js"></script>
   <script src="../../js/jquery-migrate-3.0.1.min.js"></script>
   <script src="../../js/jquery-ui.js"></script>
@@ -198,12 +182,12 @@ if (!isset($_SESSION["invalid_CF"])) {
 
   <script src="../../js/main.js"></script>
   <script>
-    function printInvalidCF() {
-      alert("Attenzione, il codice fiscale non è valido!");
+    function printInvalidAccount() {
+      alert("Credenziali non valide!");
       <?php
-      $_SESSION["invalid_CF"] = true;
+      $_SESSION["invalid_account"] = 0;
       ?>
-  bo  }
+    }
   </script>
 </>
 </html>

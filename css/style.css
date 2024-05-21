@@ -622,40 +622,6 @@ h1, h2, h3, h4, h5,
   .hero p {
     color: rgba(255, 255, 255, 0.7); }
 
-#date-countdown {
-  margin-bottom: 20px; }
-  #date-countdown .countdown-block {
-    display: inline-block;
-    font-size: 12px;
-    border-radius: 7px;
-    color: #fff;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    width: 80px;
-    margin-right: 8px;
-    text-align: center; }
-    #date-countdown .countdown-block .label {
-      line-height: 1.2;
-      font-size: 2rem;
-      display: block; }
-
-#date-countdown2 {
-  margin-bottom: 20px; }
-  #date-countdown2 .countdown-block {
-    display: inline-block;
-    font-size: 12px;
-    border-radius: 7px;
-    color: #fff;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    width: 80px;
-    margin-right: 8px;
-    text-align: center; }
-    #date-countdown2 .countdown-block .label {
-      line-height: 1.2;
-      font-size: 1rem;
-      display: block; }
-
 .more {
   text-transform: uppercase;
   font-size: 12px;
@@ -798,15 +764,17 @@ h1, h2, h3, h4, h5,
       width: 100%; }
 
 .video-media {
-  position: relative; }
+  position: relative;
+  width: 279px;
+  height: 280px;}
   .video-media:before {
     position: absolute;
     content: "";
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.3); }
+    bottom: 0; 
+    background: rgba(0, 0, 0, 0.1);}
   .video-media .play-button {
     position: absolute;
     display: block;
@@ -849,7 +817,6 @@ h1, h2, h3, h4, h5,
       .video-media .play-button .caption h3 {
         line-height: 1;
         color: #fff;
-        background-color: blueviolet;
         font-weight: 700;
         font-size: 18px; }
 
@@ -914,18 +881,37 @@ h1, h2, h3, h4, h5,
       background: #ee1e46; }
 
 .custom-table {
-  margin-bottom: 0; }
-  .custom-table thead tr th {
-    background: #ee1e46;
-    color: #fff;
-    border: none; }
+  margin-bottom: 0;
+  margin: auto;
+  white-space:nowrap;
+  text-align: center;
+  border-collapse: separate;
+  border-spacing: 0px;
+  border: 10px solid darkgoldenrod;
+  border-bottom: 10px solid darkgoldenrod;
+  border-radius: 12px;
+  background-color: black;}
+  .custom-table thead th {
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 30px;
+    color: purple;
+    background-color: white; }
   .custom-table tbody tr td {
-    border: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-    .custom-table tbody tr td strong {
-      font-weight: 400; }
-  .custom-table tbody tr:last-child td {
-    border: none; }
+  .custom-table tbody tr td strong {
+    font-weight: 400; }
+  .custom-table th, td {
+    padding: 20px;
+    }
+  .custom-table td {
+    font-family: "Sedan SC", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 25px;
+    color: lightblue;
+    border-bottom: 10px solid darkgoldenrod;}  
 
 .footer-section {
   padding-top: 50px;
@@ -948,6 +934,8 @@ h1, h2, h3, h4, h5,
         color: black;
         background-color: lightseagreen; }
 
+.custom-nav{
+  text-align: right;}        
 .custom-nav a {
   font-size: 30px;
   display: inline-block;
@@ -1122,4 +1110,65 @@ h1, h2, h3, h4, h5,
 .img-carousel{
   width: 250px;
   height:200px;
+}
+
+.champions_league td{
+  color: greenyellow;
+}
+
+.europa_league td{
+  color: orange;
+}
+
+.conference_league{
+  color: darkgreen;
+  background-color: purple;
+}
+
+.retrocessione td{
+  color: red;
+}
+
+.normale{
+  color: steelblue;
+}
+
+.champions_league:hover{
+  background-color: greenyellow;
+}
+
+.champions_league:hover td{
+  color: black;
+}
+
+.europa_league:hover{
+  background-color: orange;
+}
+
+.europa_league:hover td{
+  color: black;
+}
+
+.conference_league:hover{
+  background-color: darkgreen;
+}
+
+.conference_league:hover td{
+  color: black;
+}
+
+.retrocessione:hover{
+  background-color: red;
+}
+
+.retrocessione:hover td{
+  color: black;
+}
+
+.normale:hover{
+  background-color: steelblue;
+}
+
+.normale:hover td{
+  color: black;
 }
