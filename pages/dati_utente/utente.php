@@ -1,9 +1,29 @@
 <?php
-//gestione profilo utente
-//sloggarsi (uscita sessione)
+// modifica dati utente
 //eliminare account (eliminazione account)
-//visualizzare pagina con query string composta da: url + id_utente --> per visualizzare i dati di un utente (in sessione)
-//questa pagina deve essere vista solo se $_SESSION["invalid_account"] == 1
+session_start();
+if($_SESSION["invalid_account"] == 1){
+require_once("../../databases/database_progetto/Mysingleton1.php");
+$connection = Mysingleton1::getInstance();
+$Id_utente = $_GET["u"];
+$query_utente = "SELECT CF, nome, cognome, telefono, data_nascita, email
+                 FROM Utente
+                 WHERE Id_utente = :id_utente";
+$sth_utente = $connection->prepare($query_utente);
+$sth_utente->bindParam(":id_utente", $Id_utente, PDO::PARAM_INT);
+$sth_utente->execute();
+$row_utente = $sth_utente->fetch(PDO::FETCH_OBJ);
+$CF = $row_utente->CF;
+$nome = $row_utente->nome;
+$cognome = $row_utente->cognome;
+$telefono = $row_utente->telefono;
+$data_db = $row_utente->data_nascita;
+$timestamp_data = strtotime($data_db);   
+$formato = 'd/m/Y';    
+$data_nascita = date($formato, $timestamp_data); 
+$email = $row_utente->email;
+
+//var_dump($_SESSION["invalid_account"]);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,8 +75,8 @@
               <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
                 <li><a href="../../index.php" class="nav-link">Home</a></li>
                 <li><a href="../selezione_evento/evento.php" class="nav-link">Eventi</a></li>
-                <li><a href="../serie_a/classifica.php">Classifica Serie A 2023/2024</a></li>
-                <li><a href="../serie_a/highlights.php">Highlights Serie A 2023/2024</a></li>
+                <li><a href="../serie_a/classifica.php" class="nav-link">Classifica Serie A 2023/2024</a></li>
+                <li><a href="../serie_a/highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
                 <li class="active"><a href="#" class="nav-link">Profilo Utente</a></li>
               </ul>
             </nav>
@@ -81,19 +101,29 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-7">
-            <form action="checkInput.php" method="post">
+            <form>
               <div class="form-group">
-                <input type="email" name="email_login" placeholder="Email" class="form-control" required>
+                <input type="text" name="codice_fiscale" maxlength="16" placeholder="Codice fiscale: <?php echo"$CF"; ?>" class="form-control" disabled>
               </div>
               <div class="form-group">
-                <input type="password" name="password_login" placeholder="Password" class="form-control" required>
+                <input type="text" name="nome" placeholder="Nome: <?php echo"$nome"; ?>" class="form-control" disabled>
               </div>
               <div class="form-group">
-                <input type="submit" value="Log-in" class="btn btn-primary py-3 px-5">
-                <input type="reset" value="Annulla log-in" class="btn btn-primary py-3 px-5">
+                <input type="text" name="cognome" placeholder="Cognome: <?php  echo"$cognome"; ?>" class="form-control" disabled>
               </div>
               <div class="form-group">
-                Non hai effettuato la registrazione? <a href="registrazione.php">Clicca qui</a>
+                <input type="text" name="telefono" placeholder="Numero di telefono: <?php echo"$telefono"; ?>" class="form-control" disabled>
+              </div>
+              <div class="form-group">
+                <input type="text"  name="data_nascita" placeholder="Data di nascita: <?php echo"$data_nascita"; ?>" class="form-control" disabled>
+              </div>
+              <div class="form-group">
+                <input type="email" name="email" placeholder="Email: <?php  echo"$email"; ?>" class="form-control" disabled>
+              </div>
+              <div class="form-group text-center">
+                <a href="manage_utente.php?u=<?php echo"$Id_utente";?>&r=mod" class="btn btn-primary py-3 px-5">Modifica dati</a>
+                <a href="manage_utente.php?u=<?php echo"$Id_utente";?>&r=del" class="btn btn-primary py-3 px-5">Elimina account</a>
+                <a href="manage_utente.php?u=<?php echo"$Id_utente";?>&r=esc" class="btn btn-primary py-3 px-5">Esci</a>
               </div>
             </form>
           </div>
@@ -181,13 +211,12 @@
   <script src="../../js/jquery.mb.YTPlayer.min.js"></script>
 
   <script src="../../js/main.js"></script>
-  <script>
-    function printInvalidAccount() {
-      alert("Credenziali non valide!");
-      <?php
-      $_SESSION["invalid_account"] = 0;
-      ?>
-    }
-  </script>
-</>
+  </body>
+
 </html>
+<?php
+}
+else{
+  $_SESSION["invalid_request"] = -1; //richiesta della pagina senza essere in una sessione specifica
+  header("Location: ../../index.php");
+}

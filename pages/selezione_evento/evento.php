@@ -1,6 +1,8 @@
 <?php
 session_start();
 //selezione evento (prima riempire database degli eventi, cibo, fornitori, hotel, trasporto)
+
+//var_dump($_SESSION["invalid_account"]);
 ?>
 
 <!DOCTYPE html>
@@ -52,14 +54,14 @@ session_start();
             <nav class="site-navigation position-relative text-right" role="navigation">
               <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
                 <li><a href="../../index.php" class="nav-link">Home</a></li>
-                <li><a href="#" class="nav-link">Eventi</a></li>
-                <li><a href="../serie_a/classifica.php">Classifica Serie A 2023/2024</a></li>
-                <li><a href="../serie_a/highlights.php">Highlights Serie A 2023/2024</a></li>
+                <li class="active"><a href="#" class="nav-link">Eventi</a></li>
+                <li><a href="../serie_a/classifica.php" class="nav-link">Classifica Serie A 2023/2024</a></li>
+                <li><a href="../serie_a/highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
                 <?php
                 if ($_SESSION['invalid_account'] == 1) {
-                  echo '<li class="active"><a href="="../dati_utente/utente.php" class="nav-link">Profilo utente</a></li>';
+                  echo '<li><a href="../dati_utente/utente.php?u=' . $_SESSION["utente"] .'" class="nav-link">Profilo utente</a></li>';
                 } else {
-                  echo '<li><a href="../login_registrazione/login.php">Log-in</a></li>';
+                  echo '<li><a href="../login_registrazione/login.php" class="nav-link">Log-in</a></li>';
                 }
                 ?>
               </ul>
@@ -186,13 +188,5 @@ session_start();
   <script src="../../js/jquery.mb.YTPlayer.min.js"></script>
 
   <script src="../../js/main.js"></script>
-  <script>
-    function printInvalidEmail() {
-      alert("Attenzione, l'account inserito non è registrato!");
-      <?php
-      $_SESSION["invalid_email"] = false;
-      ?>
-  b  }
-  </script>
-</>
+</body>
 </html>

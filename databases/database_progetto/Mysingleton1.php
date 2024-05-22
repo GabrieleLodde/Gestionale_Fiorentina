@@ -16,7 +16,7 @@ class Mysingleton1 extends PDO
     {
         if (!isset($instance))
             $instance = new Mysingleton1(
-                "mysql:host=localhost;dbname=progetto_trasferte",
+                "mysql:host=localhost;dbname=progetto_fiorentina",
                 "root",
                 "",
                 array(PDO::ATTR_PERSISTENT => true)

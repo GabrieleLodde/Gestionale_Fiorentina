@@ -1,8 +1,11 @@
 <?php
 session_start();
-if (!isset($_SESSION["invalid_CF"])) {
-  $_SESSION["invalid_CF"] = true;
+if (!isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
+  $_SESSION["invalid_CF"] = false;
+  $_SESSION["invalid_email"] = false;
 }
+
+//var_dump($_SESSION["invalid_account"]);
 ?>
 
 <!DOCTYPE html>
@@ -29,10 +32,13 @@ if (!isset($_SESSION["invalid_CF"])) {
 </head>
 
 <body <?php
-      if ($_SESSION["invalid_CF"] == false) {
-      ?> onload="printInvalidCF()" <?php
-                                  }
-                                    ?>>
+      if ($_SESSION["invalid_CF"] == true) {
+        ?> onload="printInvalidCF()" <?php
+      }
+      else if($_SESSION["invalid_email"] == true){
+        ?> onload="printInvalidEmail()" <?php
+      }
+      ?>>
   <div class="site-wrap">
 
     <div class="site-mobile-menu site-navbar-target">
@@ -58,8 +64,8 @@ if (!isset($_SESSION["invalid_CF"])) {
               <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
                 <li><a href="../../index.php" class="nav-link">Home</a></li>
                 <li><a href="../selezione_evento/evento.php" class="nav-link">Eventi</a></li>
-                <li><a href="../serie_a/classifica.php">Classifica Serie A 2023/2024</a></li>
-                <li><a href="../serie_a/highlights.php">Highlights Serie A 2023/2024</a></li>
+                <li><a href="../serie_a/classifica.php" class="nav-link">Classifica Serie A 2023/2024</a></li>
+                <li><a href="../serie_a/highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
                 <li class="active"><a href="login.php" class="nav-link">Log-in</a></li>
               </ul>
             </nav>
@@ -93,10 +99,10 @@ if (!isset($_SESSION["invalid_CF"])) {
                 <input type="text" name="cognome" placeholder="Cognome" class="form-control" required>
               </div>
               <div class="form-group">
-                <input type="text" name="nazionalita" placeholder="Nazionalità" class="form-control" required>
+                <input type="tel" name="telefono" maxlength="15" placeholder="Telefono (es. 34 333-222-1100)" class="form-control" pattern="[0-9]{2}\s[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
               </div>
               <div class="form-group">
-                <input type="date" name="data_nascita" min="1900-01-01" max="2024-05-01" placeholder="Data di nascita" class="form-control" required>
+                <input type="text" onfocus="(this.type='date')" name="data_nascita" min="1900-01-01" max="2024-05-01" placeholder="Data di nascita" class="form-control" required>
               </div>
               <div class="form-group">
                 <input type="email" name="email" placeholder="Email" class="form-control" required>
@@ -201,9 +207,15 @@ if (!isset($_SESSION["invalid_CF"])) {
     function printInvalidCF() {
       alert("Attenzione, il codice fiscale non è valido!");
       <?php
-      $_SESSION["invalid_CF"] = true;
+      $_SESSION["invalid_CF"] = false;
       ?>
-  bo  }
+    }
+    function printInvalidEmail() {
+      alert("Attenzione, l'email non è valida!");
+      <?php
+      $_SESSION["invalid_email"] = false;
+      ?>
+    }
   </script>
-</>
+</body>
 </html>

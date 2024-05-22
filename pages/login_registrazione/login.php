@@ -1,8 +1,10 @@
 <?php
 session_start();
 if(!isset($_SESSION['invalid_account'])){
-  $_SESSION['invalid_acount'] = 0;
+  $_SESSION['invalid_account'] = 0;
 }
+
+//var_dump($_SESSION["invalid_account"]);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,8 +59,8 @@ if(!isset($_SESSION['invalid_account'])){
               <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
                 <li><a href="../../index.php" class="nav-link">Home</a></li>
                 <li><a href="../selezione_evento/evento.php" class="nav-link">Eventi</a></li>
-                <li><a href="../serie_a/classifica.php">Classifica Serie A 2023/2024</a></li>
-                <li><a href="../serie_a/highlights.php">Highlights Serie A 2023/2024</a></li>
+                <li><a href="../serie_a/classifica.php" class="nav-link">Classifica Serie A 2023/2024</a></li>
+                <li><a href="../serie_a/highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
                 <li class="active"><a href="registrazione.php" class="nav-link">Registrazione</a></li>
               </ul>
             </nav>
@@ -191,5 +193,5 @@ if(!isset($_SESSION['invalid_account'])){
       ?>
     }
   </script>
-</>
+</body>
 </html>

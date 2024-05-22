@@ -1,11 +1,15 @@
 <?php
 session_start();
-if (!isset($_SESSION['invalid_account'])) {
-  $_SESSION['invalid_account'] = 0;
+if (!isset($_SESSION["invalid_account"]) || !isset($_SESSION["invalid_request"])) {
+  $_SESSION["invalid_account"] = 0; //inizializzazione variabile di sessione per validazione account
+  $_SESSION["invalid_request"] = 0; //inizializzazione variabile di sessione per validazione richiesta pagina
 }
+
+//var_dump($_SESSION["invalid_account"]);
+//var_dump($_SESSION["invalid_request"]);
+
 //session_destroy();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -28,10 +32,20 @@ if (!isset($_SESSION['invalid_account'])) {
   <link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
   <link rel="stylesheet" href="css/aos.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/jquery.countdown.css" />
 </head>
 
-<body>
-
+<body <?php
+      if($_SESSION["invalid_request"] == -1){
+        ?> onload="printInvalidRequest()" <?php
+      }
+      if ($_SESSION["invalid_account"] == 2){
+        ?> onload="printDisconnessione()" <?php
+      }
+      if ($_SESSION["invalid_account"] == 3){
+        ?> onload="printRimozione()" <?php
+      }
+      ?>>
   <div class="site-wrap">
     <div class="site-mobile-menu site-navbar-target">
       <div class="site-mobile-menu-header">
@@ -54,15 +68,15 @@ if (!isset($_SESSION['invalid_account'])) {
           <div class="ml-auto">
             <nav class="site-navigation position-relative text-right" role="navigation">
               <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
-                <li class="active"><a href="#">Home</a></li>
+                <li class="active"><a href="#" class="nav-link">Home</a></li>
                 <li><a href="pages/selezione_evento/evento.php">Eventi</a></li>
-                <li><a href="pages/serie_a/classifica.php">Classifica Serie A 2023/2024</a></li>
-                <li><a href="pages/serie_a/highlights.php">Highlights Serie A 2023/2024</a></li>
+                <li><a href="pages/serie_a/classifica.php" class="nav-link">Classifica Serie A 2023/2024</a></li>
+                <li><a href="pages/serie_a/highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
                 <?php
                 if ($_SESSION['invalid_account'] == 1) {
-                  echo '<li class="active"><a href="#" class="nav-link">Profilo utente</a></li>';
+                  echo '<li><a href="pages/dati_utente/utente.php?u=' . $_SESSION["utente"] . '" class="nav-link">Profilo utente</a></li>';
                 } else {
-                  echo '<li><a href="pages/login_registrazione/login.php">Log-in</a></li>';
+                  echo '<li><a href="pages/login_registrazione/login.php" class="nav-link">Log-in</a></li>';
                 }
                 ?>
               </ul>
@@ -79,9 +93,11 @@ if (!isset($_SESSION['invalid_account'])) {
       <div class="container">
         <div class="row align-items-center">
           <div class="col mx-auto text-center">
-            <h1 class="text-purple">Gestione trasferte Fiorentina</h1>
+            <h1 class="text-purple">Gestionale ACF Fiorentina</h1>
             <p class="mt-5">
-              <a href="#trasferte" class="btn btn-primary py-3 px-4 mr-3">Trasferte principali</a>
+              <a href="#ultima" class="btn btn-primary py-3 px-4 mr-3">Ultima partita</a>
+              <a href="#eventi" class="btn btn-primary py-3 px-4 mr-3">Eventi principali</a>
+              <a href="#imminente" class="btn btn-primary py-3 px-4 mr-3">Evento imminente</a>
               <a href="#notizie" class="btn btn-primary py-3 px-4 mr-3">Ultime notizie</a>
             </p>
           </div>
@@ -92,9 +108,9 @@ if (!isset($_SESSION['invalid_account'])) {
 
 
     <div class="container">
-      <div class="row">
+      <div class="row" id="ultima">
         <div class="col-12 title-section mt-5">
-          <h2 class="heading">Ultima partita</h2>
+          <h2 class="heading"><a href="#" class="text-white">Ultima partita</a></h2>
         </div>
         <div class="col-lg-12">
           <div class="d-flex team-vs">
@@ -135,9 +151,9 @@ if (!isset($_SESSION['invalid_account'])) {
 
     <div class="trasferte-principali">
       <div class="container">
-        <div class="row" id="trasferte">
+        <div class="row" id="eventi">
           <div class="col-12 title-section">
-            <h2 class="heading"><a href="#" class="text-white">Trasferte principali</a></h2>
+            <h2 class="heading"><a href="#" class="text-white">Eventi principali</a></h2>
           </div>
         </div>
         <div class="row no-gutters">
@@ -211,7 +227,7 @@ if (!isset($_SESSION['invalid_account'])) {
 
     <div class="site-section bg-dark">
       <div class="container">
-        <div class="row d-flex justify-content-center">
+        <div class="row d-flex justify-content-center" id="imminente">
           <div class="col-12 title-section">
             <h2 class="heading"><a href="#" class="text-white">Evento imminente</a></h2>
           </div>
@@ -240,13 +256,14 @@ if (!isset($_SESSION['invalid_account'])) {
               </div>
 
               <div class="text-center widget-vs-contents mb-4">
-                <h4><b>Conference League</b></h4>
-                <p class="mb-5 pt-2 pb-3">
-                  <span class="d-block text-white"><b>29 Maggio 2024</b></span>
-                  <span class="d-block text-white"><b>21:00 CET</b></span>
-                  <strong class="text-white">AEK Arena, Atene</strong>
+                <h2 class="fw-bold"><b>Finale Conference League</b></h2>
+                <p class="mb-5 pt-2 pb-1">
+                  <span class="d-block text-white h4"><b>29 Maggio 2024</b></span>
+                  <span class="d-block text-white h4"><b>21:00 CET</b></span>
+                  <span class="d-block text-white h4"><b>AEK Arena, Atene</b></span>
                 </p>
               </div>
+              <div id="countdown"></div>
             </div>
           </div>
         </div>
@@ -276,7 +293,7 @@ if (!isset($_SESSION['invalid_account'])) {
         <div class="col-lg-6">
           <div class="custom-media d-flex">
             <a class="img mr-4" target="_blank" href="images/maglia.jpg">
-              <img src="images/maglia.jpg" alt="Image" class="img-fluid">
+              <img src="images/maglia.jpg" alt="Image" class="img-news">
             </a>
             <div class="text">
               <span class="meta">16 Maggio 2024</span>
@@ -363,10 +380,35 @@ if (!isset($_SESSION['invalid_account'])) {
   <script src="js/jquery.fancybox.min.js"></script>
   <script src="js/jquery.sticky.js"></script>
   <script src="js/jquery.mb.YTPlayer.min.js"></script>
-
   <script src="js/main.js"></script>
+  <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="js/jquery.countdown.js"></script>
+	<script src="js/script.js"></script>
+  <script>
+    function printInvalidRequest() {
+      alert("Attenzione, la pagina utente non è disponibile se non si è loggati!");
+      <?php
+      $_SESSION["invalid_request"] = 0;
+      ?>
+    }
+    function printDisconnessione() {
+      alert("Disconnessione avvenuta con successo, forza viola!");
+      <?php
+      if($_SESSION["invalid_account"] == 2){
+        $_SESSION["invalid_account"] = 0;
+      }
+      ?>
+    }
+    function printRimozione() {
+      alert("Rimozione avvenuta con successo, forza viola!");
+      <?php
+      if($_SESSION["invalid_account"] == 3){
+        $_SESSION["invalid_account"] = 0;
+      }
+      ?>
+    }
+  </script>
 </body>
-
 </html>
 
 <?php

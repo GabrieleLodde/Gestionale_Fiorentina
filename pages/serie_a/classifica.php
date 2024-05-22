@@ -2,6 +2,13 @@
 session_start();
 require_once("../../databases/database_partite/Mysingleton.php");
 $connection = Mysingleton::getInstance();
+$select_classifica = "SELECT * 
+                      FROM Squadre 
+                      ORDER BY numero_punti DESC, differenza_reti DESC, goal_fatti DESC";
+$sth_classifica = $connection->prepare($select_classifica);
+$sth_classifica->execute();
+
+//var_dump($_SESSION["invalid_account"]);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +19,7 @@ $connection = Mysingleton::getInstance();
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" type="image/x-icon" href="../../images/logo.png">
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Orbitron&family=Freeman&family=Sedan+SC&family=Sixtyfour&family=Silkscreen&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Orbitron&family=Freeman&family=Josefin+Slab:ital,wght@0,100..700;1,100..700&family=Sixtyfour&family=Silkscreen&family=Bebas+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../fonts/icomoon/style.css">
     <link rel="stylesheet" href="../../css/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="../../css/jquery-ui.css">
@@ -40,7 +47,6 @@ $connection = Mysingleton::getInstance();
 
 
         <header class="site-navbar py-4" role="banner">
-
             <div class="container">
                 <div class="d-flex align-items-center">
                     <div class="site-logo">
@@ -53,13 +59,13 @@ $connection = Mysingleton::getInstance();
                             <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
                                 <li><a href="../../index.php" class="nav-link">Home</a></li>
                                 <li><a href="../selezione_evento/evento.php" class="nav-link">Eventi</a></li>
-                                <li><a href="#" class="nav-link">Classifica Serie A 2023/2024</a></li>
+                                <li class="active"><a href="#" class="nav-link">Classifica Serie A 2023/2024</a></li>
                                 <li><a href="highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
                                 <?php
                                 if ($_SESSION['invalid_account'] == 1) {
-                                    echo '<li class="active"><a href="="../dati_utente/utente.php" class="nav-link">Profilo utente</a></li>';
+                                    echo '<li><a href="../dati_utente/utente.php?u=' . $_SESSION["utente"] . '" class="nav-link">Profilo utente</a></li>';
                                 } else {
-                                    echo '<li><a href="../login_registrazione/login.php">Log-in</a></li>';
+                                    echo '<li><a href="../login_registrazione/login.php" class="nav-link">Log-in</a></li>';
                                 }
                                 ?>
                             </ul>
@@ -69,7 +75,6 @@ $connection = Mysingleton::getInstance();
                     </div>
                 </div>
             </div>
-
         </header>
 
         <div class="hero overlay" style="background-image: url('../../images/coreografia_sfondo.jpg');">
@@ -86,15 +91,17 @@ $connection = Mysingleton::getInstance();
                 <div class="col-12 title-section mt-5 text-right">
                     <a title="Legenda" data-html="true" data-toggle="popover" data-trigger="hover" data-placement="top"
                         data-content="
-                        Champions League = Colore Giallo<br>
-                        Europa League = Colore Arancione<br>
-                        Conference League = Colore Verde<br>
-                        Retrocessione = Colore Rosso">
-                        <button type="button" class="btn btn-info btn-lg">Visualizza legenda</button>
+                        <div>
+                            Champions League = Giallo<br><br>
+                            Europa League = Arancione<br><br>
+                            Conference League = Verde<br><br>
+                            Retrocessione = Rosso
+                        </div>">
+                        <button type="button" id="button-popover">Visualizza legenda</button>
                     </a>
                 </div>
                 <div class="row align-items-center">
-                    <div class="col mx-auto text-center">
+                    <div class="col mx-auto text-center" style="overflow-x:auto;">
                         <table class="table custom-table">
                             <thead>
                                 <tr>
@@ -113,9 +120,6 @@ $connection = Mysingleton::getInstance();
                             </thead>
                             <tbody>
                                 <?php
-                                $select_classifica = "SELECT * FROM Squadre ORDER BY numero_punti DESC, differenza_reti DESC, goal_fatti DESC";
-                                $sth_classifica = $connection->prepare($select_classifica);
-                                $sth_classifica->execute();
                                 $count = 0;
                                 while (($row_squadra = $sth_classifica->fetch(PDO::FETCH_OBJ))) {
                                     $count++;
@@ -237,10 +241,11 @@ $connection = Mysingleton::getInstance();
 <?php
 function stampaDati($count, $row_squadra)
 {
+    $squadra = strtoupper($row_squadra->nome);
     echo "     
     <td>" . $count . "</td>
     <td><img src='" . $row_squadra->logo_squadra . "' alt='logo_squadra'></td>
-    <td>" . $row_squadra->nome . "</td>
+    <td title=\"$squadra\">" . $row_squadra->nome . "</td>
     <td>" . $row_squadra->partite_giocate . "</td>
     <td>" . $row_squadra->vittorie . "</td>
     <td>" . $row_squadra->pareggi . "</td>

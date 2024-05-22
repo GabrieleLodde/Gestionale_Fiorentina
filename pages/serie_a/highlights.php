@@ -9,6 +9,8 @@ $sth_risultati->execute();
 $query_squadre = "SELECT id_squadra, nome FROM Squadre";
 $sth_squadre = $connection->prepare($query_squadre);
 $sth_squadre->execute();
+
+//var_dump($_SESSION["invalid_account"]);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,12 +63,12 @@ $sth_squadre->execute();
                                 <li><a href="../../index.php" class="nav-link">Home</a></li>
                                 <li><a href="../selezione_evento/evento.php" class="nav-link">Eventi</a></li>
                                 <li><a href="classifica.php" class="nav-link">Classifica Serie A 2023/2024</a></li>
-                                <li><a href="highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
+                                <li class="active"><a href="highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
                                 <?php
                                 if ($_SESSION['invalid_account'] == 1) {
-                                    echo '<li class="active"><a href="="../dati_utente/utente.php" class="nav-link">Profilo utente</a></li>';
+                                    echo '<li><a href="../dati_utente/utente.php?u=' . $_SESSION["utente"] . '" class="nav-link">Profilo utente</a></li>';
                                 } else {
-                                    echo '<li><a href="../login_registrazione/login.php">Log-in</a></li>';
+                                    echo '<li><a href="../login_registrazione/login.php" class="nav-link">Log-in</a></li>';
                                 }
                                 ?>
                             </ul>
