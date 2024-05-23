@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["nome"])) {
         $last_index = $connection->lastInsertId();
 
         $query_utente = '   INSERT 
-                            INTO utente(CF, nome, cognome, telefono, data_nascita, email, Id_password)
+                            INTO Utente(CF, nome, cognome, telefono, data_nascita, email, Id_password)
                             VALUES(:codice_fiscale, :nome, :cognome, :telefono, :data_nascita, :email, :id_password)';
         $sth_utente = $connection->prepare($query_utente);
         $sth_utente->bindParam(":codice_fiscale", $CF, PDO::PARAM_STR);
@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["nome"])) {
     $password_login  = $_POST["password_login"];
 
     $query_email = 'SELECT Id_utente, Id_password
-                    FROM utente
+                    FROM Utente
                     WHERE email = :email';
     $sth_email = $connection->prepare($query_email);
     $sth_email->bindParam(":email", $email, PDO::PARAM_STR);

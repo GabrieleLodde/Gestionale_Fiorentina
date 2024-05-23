@@ -497,14 +497,14 @@ VALUES
         (8, 10, 1, 1, "../../images/inter_lazio.jpg", "https://www.youtube.com/watch?v=LMP7s8JOgq0&pp=ygUQaW50ZXIgbGF6aW8gMSAxIA%3D%3D"),
         (15, 7, 1, 0, "../../images/roma_genoa.jpg", "https://www.youtube.com/watch?v=uIoF_GxDNno&pp=ygUOcm9tYSBnZW5vYSAxIDA%3D"),
         (16, 20, 1, 2, "../../images/salernitana_verona.jpg", "https://www.youtube.com/watch?v=4Mqiuw5vTYw&pp=ygUWc2FsZXJuaXRhbmEgdmVyb25hIDEgMg%3D%3D"),
-        (2, 9, 3, 3, "../../images/bologna_juventus.jpg", "https://www.youtube.com/watch?v=iaGjlb-Oekg&pp=ygUUYm9sb2duYSBqdXZlbnR1cyAzIDM%3D");
+        (2, 9, 3, 3, "../../images/bologna_juventus.jpg", "https://www.youtube.com/watch?v=iaGjlb-Oekg&pp=ygUUYm9sb2duYSBqdXZlbnR1cyAzIDM%3D"),
         
         -- TRENTOTTESIMA GIORNATA
+        (3, 5, 2, 3, "../../images/cagliari_fiorentina.jpg", "https://www.youtube.com/watch?v=AY8cMiyRKag&pp=ygUeaGlnaGxpZ2h0cyBjYWdsaWFyaSBmaW9yZW50aW5h");
         -- (12, 16, ---, ---, "../../images/milan_salernitana.jpg", ""),
         -- (7, 2, ---, ---, "../../images/genoa_milan.jpg", ""),
         -- (9, 13, ---, ---, "../../images/juventus_monza.jpg", ""),
         -- (4, 15, ---, ---, "../../images/empoli_roma.jpg", ""),
-        -- (3, 5, ---, ---, "../../images/cagliari_fiorentina.jpg", ""),
         -- (1, 18, ---, ---, "../../images/atalanta_torino.jpg", ""),
         -- (14, 11, ---, ---, "../../images/napoli_lecce.jpg", ""),
         -- (6, 19, ---, ---, "../../images/frosinone_udinese.jpg", ""),

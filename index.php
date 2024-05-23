@@ -36,14 +36,14 @@ if (!isset($_SESSION["invalid_account"]) || !isset($_SESSION["invalid_request"])
 </head>
 
 <body <?php
-      if($_SESSION["invalid_request"] == -1){
-        ?> onload="printInvalidRequest()" <?php
+      if ($_SESSION["invalid_request"] == -1) {
+      ?> onload="printInvalidRequest()" <?php
       }
-      if ($_SESSION["invalid_account"] == 2){
-        ?> onload="printDisconnessione()" <?php
+      if ($_SESSION["invalid_account"] == 2) {
+      ?> onload="printDisconnessione()" <?php
       }
-      if ($_SESSION["invalid_account"] == 3){
-        ?> onload="printRimozione()" <?php
+      if ($_SESSION["invalid_account"] == 3) {
+      ?> onload="printRimozione()" <?php
       }
       ?>>
   <div class="site-wrap">
@@ -114,32 +114,29 @@ if (!isset($_SESSION["invalid_account"]) || !isset($_SESSION["invalid_request"])
         </div>
         <div class="col-lg-12">
           <div class="d-flex team-vs">
-            <span class="score">#-#</span>
+            <span class="score">2-3</span>
             <div class="team-1 w-50">
               <div class="team-details w-100 text-center">
-                <a href="images/logo.png">
-                  <img src="images/logo.png" alt="Image" class="img-fluid">
+                <a target="_blank" href="images/logo_cagliari.png">
+                  <img src="images/logo_cagliari.png" alt="Image" class="img-fluid">
                 </a>
-                <h3>Fiorentina</h3>
+                <h3>Cagliari</h3>
                 <ul class="list-unstyled">
-                  <li>---</li>
-                  <li>---</li>
-                  <li>---</li>
-                  <li>---</li>
+                  <li>Alessandro Deiola 64'</li>
+                  <li>Kingstone Mutandwa 85'</li>
                 </ul>
               </div>
             </div>
             <div class="team-2 w-50">
               <div class="team-details w-100 text-center">
-                <a href="images/logo_cagliari.png">
-                  <img src="images/logo_cagliari.png" alt="Image" class="img-fluid">
+                <a target="_blank" href="images/logo_fiorentina_match.png">
+                  <img src="images/logo_fiorentina_match.png" alt="Image" class="img-fluid">
                 </a>
-                <h3>Cagliari</h3>
+                <h3>Fiorentina</h3>
                 <ul class="list-unstyled">
-                  <li>---</li>
-                  <li>---</li>
-                  <li>---</li>
-                  <li>---</li>
+                  <li>Giacomo Bonaventura 39'</li>
+                  <li>Nicolás Gonzalez 89'</li>
+                  <li>Arthur 90+13'(R)</li>
                 </ul>
               </div>
             </div>
@@ -382,8 +379,8 @@ if (!isset($_SESSION["invalid_account"]) || !isset($_SESSION["invalid_request"])
   <script src="js/jquery.mb.YTPlayer.min.js"></script>
   <script src="js/main.js"></script>
   <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-	<script src="js/jquery.countdown.js"></script>
-	<script src="js/script.js"></script>
+  <script src="js/jquery.countdown.js"></script>
+  <script src="js/script.js"></script>
   <script>
     function printInvalidRequest() {
       alert("Attenzione, la pagina utente non è disponibile se non si è loggati!");
@@ -391,24 +388,27 @@ if (!isset($_SESSION["invalid_account"]) || !isset($_SESSION["invalid_request"])
       $_SESSION["invalid_request"] = 0;
       ?>
     }
+
     function printDisconnessione() {
       alert("Disconnessione avvenuta con successo, forza viola!");
       <?php
-      if($_SESSION["invalid_account"] == 2){
+      if ($_SESSION["invalid_account"] == 2) {
         $_SESSION["invalid_account"] = 0;
       }
       ?>
     }
+
     function printRimozione() {
       alert("Rimozione avvenuta con successo, forza viola!");
       <?php
-      if($_SESSION["invalid_account"] == 3){
+      if ($_SESSION["invalid_account"] == 3) {
         $_SESSION["invalid_account"] = 0;
       }
       ?>
     }
   </script>
 </body>
+
 </html>
 
 <?php

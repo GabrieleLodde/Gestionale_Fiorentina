@@ -1588,7 +1588,7 @@ pre {
     color: white;
     opacity: 1; }
   .form-control:disabled, .form-control[readonly] {
-    background-color: darkred;
+    background-color: darkviolet;
     opacity: 1; }
 
 select.form-control:focus::-ms-value {

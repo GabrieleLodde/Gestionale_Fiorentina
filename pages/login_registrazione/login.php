@@ -85,18 +85,18 @@ if(!isset($_SESSION['invalid_account'])){
       <div class="container">
         <div class="row">
           <div class="col-lg-7">
-            <form action="checkInput.php" method="post">
+            <form action="checkInput.php" method="post" onReset="return verificaInputEConferma()">
               <div class="form-group">
                 <input type="email" name="email_login" placeholder="Email" class="form-control" required>
               </div>
               <div class="form-group">
                 <input type="password" name="password_login" placeholder="Password" class="form-control" required>
               </div>
-              <div class="form-group">
+              <div class="form-group text-center">
                 <input type="submit" value="Log-in" class="btn btn-primary py-3 px-5">
                 <input type="reset" value="Annulla log-in" class="btn btn-primary py-3 px-5">
               </div>
-              <div class="form-group">
+              <div class="form-group text-center">
                 Non hai effettuato la registrazione? <a href="registrazione.php">Clicca qui</a>
               </div>
             </form>
@@ -191,6 +191,27 @@ if(!isset($_SESSION['invalid_account'])){
       <?php
       $_SESSION["invalid_account"] = 0;
       ?>
+    }
+    function ConfermaOperazione() {
+      var richiesta = window.confirm("Vuoi davvero annullare il modulo?");
+      return richiesta;
+    }
+    function verificaInputEConferma() {
+      const inputs = document.querySelectorAll("form input[type=email], form input[type=password]");
+      let valorizzato = false;
+
+      for (let input of inputs) {
+        if (input.value.trim() !== "") {
+          valorizzato = true;
+          break;
+        }
+      }
+
+      if (valorizzato) {
+        return ConfermaOperazione();
+      } else {
+        return false; // Previene il reset se tutti gli input sono vuoti
+      }
     }
   </script>
 </body>

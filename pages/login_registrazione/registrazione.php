@@ -88,7 +88,7 @@ if (!isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
       <div class="container">
         <div class="row">
           <div class="col-lg-7">
-            <form action="checkInput.php" method="post">
+            <form action="checkInput.php" method="post" onReset="return verificaInputEConferma()">
               <div class="form-group">
                 <input type="text" name="codice_fiscale" maxlength="16" placeholder="Codice fiscale" onkeyup="this.value = this.value.toUpperCase();" class="form-control" required>
               </div>
@@ -110,11 +110,11 @@ if (!isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
               <div class="form-group">
                 <input type="password" name="password" placeholder="Password" class="form-control" required>
               </div>
-              <div class="form-group">
+              <div class="form-group text-center">
                 <input type="submit" value="Registrati" class="btn btn-primary py-3 px-5">
                 <input type="reset" value="Annulla registrazione" class="btn btn-primary py-3 px-5">
               </div>
-              <div class="form-group">
+              <div class="form-group text-center">
                 Hai già effettuato la registrazione? <a href="login.php">Clicca qui </a>
               </div>
             </form>
@@ -216,6 +216,27 @@ if (!isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
       $_SESSION["invalid_email"] = false;
       ?>
     }
-  </script>
+    function ConfermaOperazione() {
+      var richiesta = window.confirm("Vuoi davvero annullare il modulo?");
+      return richiesta;
+    }
+    function verificaInputEConferma() {
+      const inputs = document.querySelectorAll("form input[type=text], form input[type=tel], form input[type=date], form input[type=email], form input[type=password]");
+      let valorizzato = false;
+
+      for (let input of inputs) {
+        if (input.value.trim() !== "") {
+          valorizzato = true;
+          break;
+        }
+      }
+
+      if (valorizzato) {
+        return ConfermaOperazione();
+      } else {
+        return false; // Previene il reset se tutti gli input sono vuoti
+      }
+    }
+    </script>
 </body>
 </html>
