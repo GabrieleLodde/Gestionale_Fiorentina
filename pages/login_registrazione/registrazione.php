@@ -4,7 +4,7 @@ if (!isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
   $_SESSION["invalid_CF"] = false;
   $_SESSION["invalid_email"] = false;
 }
-
+$data_corrente = date("Y-m-j");
 //var_dump($_SESSION["invalid_account"]);
 ?>
 
@@ -33,12 +33,11 @@ if (!isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
 
 <body <?php
       if ($_SESSION["invalid_CF"] == true) {
-        ?> onload="printInvalidCF()" <?php
-      }
-      else if($_SESSION["invalid_email"] == true){
-        ?> onload="printInvalidEmail()" <?php
-      }
-      ?>>
+      ?> onload="printInvalidCF()" <?php
+                                  } else if ($_SESSION["invalid_email"] == true) {
+                                    ?> onload="printInvalidEmail()" <?php
+                                                                  }
+                                                                    ?>>
   <div class="site-wrap">
 
     <div class="site-mobile-menu site-navbar-target">
@@ -63,7 +62,6 @@ if (!isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
             <nav class="site-navigation position-relative text-right" role="navigation">
               <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
                 <li><a href="../../index.php" class="nav-link">Home</a></li>
-                <li><a href="../selezione_evento/evento.php" class="nav-link">Eventi</a></li>
                 <li><a href="../serie_a/classifica.php" class="nav-link">Classifica Serie A 2023/2024</a></li>
                 <li><a href="../serie_a/highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
                 <li class="active"><a href="login.php" class="nav-link">Log-in</a></li>
@@ -90,7 +88,7 @@ if (!isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
           <div class="col-lg-7">
             <form action="checkInput.php" method="post" onReset="return verificaInputEConferma()">
               <div class="form-group">
-                <input type="text" name="codice_fiscale" maxlength="16" placeholder="Codice fiscale" onkeyup="this.value = this.value.toUpperCase();" class="form-control" required>
+                <input type="text" name="codice_fiscale" maxlength="16" placeholder="Codice fiscale" onkeyup="this.value = this.value.toUpperCase();" pattern="[A-Z]{6}[0-9]{2}[A-Z]{1}[0-9]{2}[A-Z]{1}[0-9]{3}[A-Z]{1}" class="form-control" data-toggle="tooltip" data-placement="top" data-html="true" title="<b>esempio</b> RSSMRA85M01H501Z" required>
               </div>
               <div class="form-group">
                 <input type="text" name="nome" placeholder="Nome" class="form-control" required>
@@ -99,10 +97,10 @@ if (!isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
                 <input type="text" name="cognome" placeholder="Cognome" class="form-control" required>
               </div>
               <div class="form-group">
-                <input type="tel" name="telefono" maxlength="15" placeholder="Telefono (es. 34 333-222-1100)" class="form-control" pattern="[0-9]{2}\s[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+                <input type="tel" name="telefono" maxlength="14" placeholder="Numero di telefono" class="form-control" pattern="\+[0-9]{2}\s[0-9]{10}" data-toggle="tooltip" data-placement="top" data-html="true" title="<b>esempio</b> +39 4445556666" required>
               </div>
               <div class="form-group">
-                <input type="text" onfocus="(this.type='date')" name="data_nascita" min="1900-01-01" max="2024-05-01" placeholder="Data di nascita" class="form-control" required>
+                <input type="text" onfocus="(this.type='date')" name="data_nascita" min="1900-01-01" max="<?php echo $data_corrente; ?>" placeholder="Data di nascita" class="form-control" data-toggle="tooltip" data-placement="top" data-html="true" title="<b>data minima</b> 01/01/1900 <b>data massima</b> odierna" required>
               </div>
               <div class="form-group">
                 <input type="email" name="email" placeholder="Email" class="form-control" required>
@@ -115,7 +113,7 @@ if (!isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
                 <input type="reset" value="Annulla registrazione" class="btn btn-primary py-3 px-5">
               </div>
               <div class="form-group text-center">
-                Hai già effettuato la registrazione? <a href="login.php">Clicca qui </a>
+                Hai già effettuato la registrazione? <a href="login.php">Clicca qui</a>
               </div>
             </form>
           </div>
@@ -186,7 +184,7 @@ if (!isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
     </footer>
 
   </div>
-  
+
   <script src="../../js/jquery-3.3.1.min.js"></script>
   <script src="../../js/jquery-migrate-3.0.1.min.js"></script>
   <script src="../../js/jquery-ui.js"></script>
@@ -204,22 +202,30 @@ if (!isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
 
   <script src="../../js/main.js"></script>
   <script>
+    $(document).ready(function() {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+  </script>
+  <script>
     function printInvalidCF() {
       alert("Attenzione, il codice fiscale non è valido!");
       <?php
       $_SESSION["invalid_CF"] = false;
       ?>
     }
+
     function printInvalidEmail() {
       alert("Attenzione, l'email non è valida!");
       <?php
       $_SESSION["invalid_email"] = false;
       ?>
     }
+
     function ConfermaOperazione() {
       var richiesta = window.confirm("Vuoi davvero annullare il modulo?");
       return richiesta;
     }
+
     function verificaInputEConferma() {
       const inputs = document.querySelectorAll("form input[type=text], form input[type=tel], form input[type=date], form input[type=email], form input[type=password]");
       let valorizzato = false;
@@ -237,6 +243,7 @@ if (!isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
         return false; // Previene il reset se tutti gli input sono vuoti
       }
     }
-    </script>
+  </script>
 </body>
+
 </html>

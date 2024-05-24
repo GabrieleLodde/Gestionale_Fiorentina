@@ -31,12 +31,12 @@ ON DELETE CASCADE ON UPDATE CASCADE);
 INSERT 
 INTO Squadre(nome, logo_squadra, partite_giocate, vittorie, pareggi, sconfitte, goal_fatti, goal_subiti, differenza_reti, numero_punti)
 VALUES	("Atalanta", "loghi/Logo_Atalanta.png", 36, 20, 6, 10, 67, 39, 28, 66),
-		("Bologna", "loghi/Logo_Bologna.png", 37, 18, 14, 5, 54, 30, 24, 68),
-        ("Cagliari", "loghi/Logo_Cagliari.png", 37, 8, 12, 17, 40, 65, -25, 36),
+		("Bologna", "loghi/Logo_Bologna.png", 38, 18, 14, 6, 54, 32, 22, 68),
+        ("Cagliari", "loghi/Logo_Cagliari.png", 38, 8, 12, 18, 42, 68, -26, 36),
         ("Empoli", "loghi/Logo_Empoli.png", 37, 8, 9, 20, 27, 53, -26, 33),
-        ("Fiorentina", "loghi/Logo_Fiorentina.png", 36, 15, 9, 12, 55, 42, 13, 54),
+        ("Fiorentina", "loghi/Logo_Fiorentina.png", 37, 16, 9, 12, 58, 44, 14, 57),
         ("Frosinone", "loghi/Logo_Frosinone.png", 37, 8, 11, 18, 44, 68, -24, 35),
-        ("Genoa", "loghi/Logo_Genoa.png", 37, 11, 13, 13, 43, 45, -2, 46),
+        ("Genoa", "loghi/Logo_Genoa.png", 38, 12, 13, 13, 45, 45, 0, 49),
         ("Inter", "loghi/Logo_Inter.png", 37, 29, 6, 2, 87, 20, 67, 93),
         ("Juventus", "loghi/Logo_Juventus.png", 37, 18, 14, 5, 52, 31, 21, 68),
         ("Lazio", "loghi/Logo_Lazio.png", 37, 18, 6, 13, 48, 38, 10, 60),
@@ -500,9 +500,9 @@ VALUES
         (2, 9, 3, 3, "../../images/bologna_juventus.jpg", "https://www.youtube.com/watch?v=iaGjlb-Oekg&pp=ygUUYm9sb2duYSBqdXZlbnR1cyAzIDM%3D"),
         
         -- TRENTOTTESIMA GIORNATA
-        (3, 5, 2, 3, "../../images/cagliari_fiorentina.jpg", "https://www.youtube.com/watch?v=AY8cMiyRKag&pp=ygUeaGlnaGxpZ2h0cyBjYWdsaWFyaSBmaW9yZW50aW5h");
-        -- (12, 16, ---, ---, "../../images/milan_salernitana.jpg", ""),
-        -- (7, 2, ---, ---, "../../images/genoa_milan.jpg", ""),
+        (3, 5, 2, 3, "../../images/cagliari_fiorentina.jpg", "https://www.youtube.com/watch?v=AY8cMiyRKag&pp=ygUeaGlnaGxpZ2h0cyBjYWdsaWFyaSBmaW9yZW50aW5h"),
+        (7, 2, 2, 0, "../../images/genoa_bologna.jpg", "");
+       -- (12, 16, ---, ---, "../../images/milan_salernitana.jpg", ""),
         -- (9, 13, ---, ---, "../../images/juventus_monza.jpg", ""),
         -- (4, 15, ---, ---, "../../images/empoli_roma.jpg", ""),
         -- (1, 18, ---, ---, "../../images/atalanta_torino.jpg", ""),

@@ -7,12 +7,12 @@ body {
   font-size: 16px; }
 
 ::-moz-selection {
-  background: #000;
-  color: #fff; }
+  background: black;
+  color: purple; }
 
 ::selection {
-  background: #000;
-  color: #fff; }
+  background: black;
+  color: purple; }
 
 a {
   -webkit-transition: .3s all ease;
@@ -1230,4 +1230,11 @@ h1, h2, h3, h4, h5,
   margin: 10px;
   padding: 5px 10px;
   cursor: pointer;
+}
+
+.tooltip .tooltip-inner {
+  color: lightblue;
+}
+.tooltip .tooltip-arrow::before {
+  color: lightblue;
 }

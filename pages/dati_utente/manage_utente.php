@@ -25,24 +25,26 @@ if ($_GET["r"] == "del") {
     $sth_delete_password = $connection->prepare($query_delete_password);
     $sth_delete_password->bindParam(":id_password", $Id_password, PDO::PARAM_INT);
     $sth_delete_password->execute();
+    $_SESSION["visualizza_catalogo"] = false; //cambio valore alla variabile di sessione per non visualizzare più il catalogo
     header("Location: ../../index.php");
     exit;
 }
 //disconnetti account
 else if ($_GET["r"] == "esc") {
     $_SESSION["invalid_account"] = 2; //cambio valore alla variabile di sessione per visualizzare l'alert di "disconnessione" in index.php
+    $_SESSION["visualizza_catalogo"] = false; //cambio valore alla variabile di sessione per non visualizzare più il catalogo
     header("Location: ../../index.php");
     exit;
 }
 //modifica dati
 else if ($_GET["r"] == "mod") {
-    $_SESSION["modifica_account"] = true;
+    $_SESSION["modifica_account"] = 1;
     header("Location: utente.php?u=$Id_utente");
     exit;
 }
 //mantieni dati originari
 else if ($_GET["r"] == "mod_esc") {
-    $_SESSION["modifica_account"] = false;
+    $_SESSION["modifica_account"] = 0;
     header("Location: utente.php?u=$Id_utente");
     exit;
 }
@@ -74,9 +76,7 @@ else if ($_SERVER['REQUEST_METHOD'] == "POST" && $_GET["r"] == "save") {
     }
     $nome = $_POST["nome"];
     $cognome = $_POST["cognome"];
-    $numero_telefono = $_POST["telefono"];
-    //conversione numero di telefono
-    $telefono = "+" . substr($numero_telefono, 0, 2) . " " . substr($numero_telefono, 3, 3) . substr($numero_telefono, 7, 3) . substr($numero_telefono, 11, 4);
+    $telefono = $_POST["telefono"];
     $data_input = $_POST["data_nascita"];
     //conversione data di nascita
     $data_nascita = date("Y-m-d", strtotime($data_input));
@@ -111,7 +111,7 @@ else if ($_SERVER['REQUEST_METHOD'] == "POST" && $_GET["r"] == "save") {
         $sth_utente->bindParam(":email", $email, PDO::PARAM_STR);
         $sth_utente->bindParam(":id_utente", $Id_utente, PDO::PARAM_INT);
         $sth_utente->execute();
-        $_SESSION["modifica_account"] = false;
+        $_SESSION["modifica_account"] = 0;
         header("Location: utente.php?u=$Id_utente");
         exit;
     }

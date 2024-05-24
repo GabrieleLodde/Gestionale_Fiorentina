@@ -1,13 +1,21 @@
 <?php
 session_start();
-if (!isset($_SESSION["invalid_account"]) || !isset($_SESSION["invalid_request"])) {
+if (!isset($_SESSION["invalid_account"]) || !isset($_SESSION["invalid_request"]) || !isset($_SESSION["visualizza_catalogo"])) {
   $_SESSION["invalid_account"] = 0; //inizializzazione variabile di sessione per validazione account
   $_SESSION["invalid_request"] = 0; //inizializzazione variabile di sessione per validazione richiesta pagina
+  $_SESSION["visualizza_catalogo"] = false; //inizializzazione variabile di sessione per visualizzazione catalogo
 }
 
+//controllo per cambiare il valore della variabile di sessione inerente alla modifica dei dati dell'utente, 
+// perchè qualora un utente selezioni questa pagina, avendo in precedenza l'intenzione di modificare i propri dati,
+// una volta che ritorna nel proprio profilo non deve visualizzare i dati modificabili, bensì fissi
+if(isset($_SESSION["modifica_account"])){
+  if($_SESSION["modifica_account"] == 1){
+      $_SESSION["modifica_account"] = 0;
+  }
+}
 //var_dump($_SESSION["invalid_account"]);
 //var_dump($_SESSION["invalid_request"]);
-
 //session_destroy();
 ?>
 
@@ -15,7 +23,7 @@ if (!isset($_SESSION["invalid_account"]) || !isset($_SESSION["invalid_request"])
 <html lang="en">
 
 <head>
-  <title>Pagina benvenuto</title>
+  <title>Pagina index</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="icon" type="image/x-icon" href="images/logo.png">
@@ -69,7 +77,10 @@ if (!isset($_SESSION["invalid_account"]) || !isset($_SESSION["invalid_request"])
             <nav class="site-navigation position-relative text-right" role="navigation">
               <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
                 <li class="active"><a href="#" class="nav-link">Home</a></li>
-                <li><a href="pages/selezione_evento/evento.php">Eventi</a></li>
+                <?php 
+                if($_SESSION["visualizza_catalogo"] == true){
+                  echo '<li><a href="pages/selezione_catalogo/catalogo.php" class="nav-link">Catalogo</a></li>';
+                }?>
                 <li><a href="pages/serie_a/classifica.php" class="nav-link">Classifica Serie A 2023/2024</a></li>
                 <li><a href="pages/serie_a/highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
                 <?php

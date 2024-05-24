@@ -3,7 +3,7 @@
 //eliminare account (eliminazione account)
 session_start();
 if (!isset($_SESSION["modifica_account"]) || !isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
-  $_SESSION["modifica_account"] = false;
+  $_SESSION["modifica_account"] = 0;
   $_SESSION["invalid_CF"] = false;
   $_SESSION["invalid_email"] = false;
 }
@@ -11,9 +11,9 @@ if ($_SESSION["invalid_account"] == 1) {
   require_once("../../databases/database_progetto/Mysingleton1.php");
   $connection = Mysingleton1::getInstance();
   $Id_utente = $_GET["u"];
-  $query_utente = "SELECT CF, nome, cognome, telefono, data_nascita, email
-                 FROM Utente
-                 WHERE Id_utente = :id_utente";
+  $query_utente = " SELECT CF, nome, cognome, telefono, data_nascita, email
+                    FROM Utente
+                    WHERE Id_utente = :id_utente";
   $sth_utente = $connection->prepare($query_utente);
   $sth_utente->bindParam(":id_utente", $Id_utente, PDO::PARAM_INT);
   $sth_utente->execute();
@@ -55,11 +55,11 @@ if ($_SESSION["invalid_account"] == 1) {
 
   <body <?php
         if ($_SESSION["invalid_CF"] == true) {
-          ?> onload="printInvalidCF()" <?php
-        } else if ($_SESSION["invalid_email"] == true) {
-          ?> onload="printInvalidEmail()" <?php
-        }
-        ?>>
+        ?> onload="printInvalidCF()" <?php
+                                    } else if ($_SESSION["invalid_email"] == true) {
+                                      ?> onload="printInvalidEmail()" <?php
+                                                                      }
+                                                                        ?>>
     <div class="site-wrap">
 
       <div class="site-mobile-menu site-navbar-target">
@@ -84,7 +84,7 @@ if ($_SESSION["invalid_account"] == 1) {
               <nav class="site-navigation position-relative text-right" role="navigation">
                 <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
                   <li><a href="../../index.php" class="nav-link">Home</a></li>
-                  <li><a href="../selezione_evento/evento.php" class="nav-link">Eventi</a></li>
+                  <li><a href="../selezione_catalogo/catalogo.php" class="nav-link">Catalogo</a></li>
                   <li><a href="../serie_a/classifica.php" class="nav-link">Classifica Serie A 2023/2024</a></li>
                   <li><a href="../serie_a/highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
                   <li class="active"><a href="#" class="nav-link">Profilo Utente</a></li>
@@ -111,7 +111,7 @@ if ($_SESSION["invalid_account"] == 1) {
         <div class="container">
           <div class="row">
             <div class="col-lg-7">
-              <?php if ($_SESSION["modifica_account"] == false) { ?>
+              <?php if ($_SESSION["modifica_account"] == 0) { ?>
                 <form>
                   <div class="form-group">
                     <input type="text" name="codice_fiscale" maxlength="16" placeholder="Codice fiscale: <?php echo "$CF"; ?>" class="form-control" disabled>
@@ -137,13 +137,12 @@ if ($_SESSION["invalid_account"] == 1) {
                     <a href="#" onclick="confermaUscita('<?php echo $Id_utente; ?>')" class="btn btn-primary py-3 px-5">Esci</a>
                   </div>
                 </form>
-              <?php  } else if ($_SESSION["modifica_account"] == true) {
-                $numero_telefono = substr($telefono, 1, 2) . " " . substr($telefono, 4, 3) . "-" . substr($telefono, 7, 3) . "-" . substr($telefono, 10, 4);
+              <?php  } else if ($_SESSION["modifica_account"] == 1) {
                 $data_corrente = date("Y-m-j");
               ?>
                 <form action="manage_utente.php?u=<?php echo $Id_utente; ?>&r=save" method="post" onsubmit="return confermaInvio()">
                   <div class="form-group">
-                    <input type="text" name="codice_fiscale" maxlength="16" value="<?php echo $CF; ?>" onkeyup="this.value = this.value.toUpperCase();" class="form-control">
+                    <input type="text" name="codice_fiscale" maxlength="16" value="<?php echo $CF; ?>" onkeyup="this.value = this.value.toUpperCase();" pattern="[A-Z]{6}[0-9]{2}[A-Z]{1}[0-9]{2}[A-Z]{1}[0-9]{3}[A-Z]{1}" class="form-control" data-toggle="tooltip" data-placement="top" data-html="true" title="<b>esempio</b> RSSMRA85M01H501Z">
                   </div>
                   <div class="form-group">
                     <input type="text" name="nome" value="<?php echo $nome; ?>" class="form-control">
@@ -152,10 +151,10 @@ if ($_SESSION["invalid_account"] == 1) {
                     <input type="text" name="cognome" value="<?php echo $cognome; ?>" class="form-control">
                   </div>
                   <div class="form-group">
-                    <input type="tel" name="telefono" maxlength="15" value="<?php echo $numero_telefono; ?>" pattern="[0-9]{2}\s[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control">
+                    <input type="tel" name="telefono" maxlength="14" value="<?php echo $telefono; ?>" class="form-control" pattern="\+[0-9]{2}\s[0-9]{10}" data-toggle="tooltip" data-placement="top" data-html="true" title="<b>esempio</b> +39 4445556666">
                   </div>
                   <div class="form-group">
-                    <input type="text" onfocus="(this.type='date')" name="data_nascita" value="<?php echo $data_nascita; ?>" min="1900-01-01" max="<?php echo $data_corrente; ?>" class="form-control">
+                    <input type="text" onfocus="(this.type='date')" name="data_nascita" min="1900-01-01" max="<?php echo $data_corrente; ?>" value="<?php echo $data_nascita; ?>" class="form-control" data-toggle="tooltip" data-placement="top" data-html="true" title="<b>data minima</b> 01/01/1900 <b>data massima</b> odierna">
                   </div>
                   <div class="form-group">
                     <input type="email" name="email" value="<?php echo $email; ?>" class="form-control">
@@ -252,6 +251,11 @@ if ($_SESSION["invalid_account"] == 1) {
 
     <script src="../../js/main.js"></script>
     <script>
+      $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+    </script>
+    <script>
       function confermaEliminazione(idUtente) {
         // Mostra un alert di conferma
         if (confirm("Vuoi davvero eliminare definitivamente questo account?")) {
@@ -300,6 +304,7 @@ if ($_SESSION["invalid_account"] == 1) {
       }
     </script>
   </body>
+
   </html>
 <?php
 } else {

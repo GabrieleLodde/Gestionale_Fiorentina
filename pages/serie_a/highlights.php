@@ -10,13 +10,21 @@ $query_squadre = "SELECT id_squadra, nome FROM Squadre";
 $sth_squadre = $connection->prepare($query_squadre);
 $sth_squadre->execute();
 
+//controllo per cambiare il valore della variabile di sessione inerente alla modifica dei dati dell'utente, 
+// perchè qualora un utente selezioni questa pagina, avendo in precedenza l'intenzione di modificare i propri dati,
+// una volta che ritorna nel proprio profilo non deve visualizzare i dati modificabili, bensì fissi
+if(isset($_SESSION["modifica_account"])){
+    if($_SESSION["modifica_account"] == 1){
+        $_SESSION["modifica_account"] = 0;
+    }
+}
 //var_dump($_SESSION["invalid_account"]);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Pagina log-in</title>
+    <title>Pagina highlights</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" type="image/x-icon" href="../../images/logo.png">
@@ -61,9 +69,12 @@ $sth_squadre->execute();
                         <nav class="site-navigation position-relative text-right" role="navigation">
                             <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
                                 <li><a href="../../index.php" class="nav-link">Home</a></li>
-                                <li><a href="../selezione_evento/evento.php" class="nav-link">Eventi</a></li>
+                                <?php 
+                                if($_SESSION["visualizza_catalogo"] == 1){
+                                    echo '<li><a href="../selezione_catalogo/catalogo.php" class="nav-link">Catalogo</a></li>';
+                                }?>
                                 <li><a href="classifica.php" class="nav-link">Classifica Serie A 2023/2024</a></li>
-                                <li class="active"><a href="highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
+                                <li class="active"><a href="#" class="nav-link">Highlights Serie A 2023/2024</a></li>
                                 <?php
                                 if ($_SESSION['invalid_account'] == 1) {
                                     echo '<li><a href="../dati_utente/utente.php?u=' . $_SESSION["utente"] . '" class="nav-link">Profilo utente</a></li>';
@@ -211,5 +222,4 @@ $sth_squadre->execute();
 
     <script src="../../js/main.js"></script>
 </body>
-
 </html>

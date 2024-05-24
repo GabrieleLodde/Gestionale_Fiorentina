@@ -1,9 +1,5 @@
 <?php
 session_start();
-if(!isset($_SESSION['invalid_account'])){
-  $_SESSION['invalid_account'] = 0;
-}
-
 //var_dump($_SESSION["invalid_account"]);
 ?>
 <!DOCTYPE html>
@@ -32,7 +28,7 @@ if(!isset($_SESSION['invalid_account'])){
 <body <?php
       if ($_SESSION["invalid_account"] == -1) {
       ?> onload="printInvalidAccount()" <?php
-                                  }?>>
+                                      } ?>>
   <div class="site-wrap">
 
     <div class="site-mobile-menu site-navbar-target">
@@ -58,7 +54,6 @@ if(!isset($_SESSION['invalid_account'])){
             <nav class="site-navigation position-relative text-right" role="navigation">
               <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
                 <li><a href="../../index.php" class="nav-link">Home</a></li>
-                <li><a href="../selezione_evento/evento.php" class="nav-link">Eventi</a></li>
                 <li><a href="../serie_a/classifica.php" class="nav-link">Classifica Serie A 2023/2024</a></li>
                 <li><a href="../serie_a/highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
                 <li class="active"><a href="registrazione.php" class="nav-link">Registrazione</a></li>
@@ -111,61 +106,61 @@ if(!isset($_SESSION['invalid_account'])){
     </div>
 
 
-    <footer class="footer-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-3">
-            <div class="widget mb-3">
-              <h3>Profilo ufficiale</h3>
-              <ul class="list-unstyled links">
-                <li><a target="_blank" href="https://www.acffiorentina.com/it">Sito ufficiale Fiorentina</a></li>
-                <li><a target="_blank" href="https://www.acffiorentina.com/it/squadre/prima-squadra-maschile/tutti">Rosa del club maschile</a></li>
-                <li><a target="_blank" href="https://www.acffiorentina.com/it/squadre/squadra-femminile/tutti">Rosa del club femminile</a></li>
-                <li><a target="_blank" href="https://www.acffiorentina.com/it/contatti">Contatti del club</a></li>
-                <li><a target="_blank" href="https://www.legaseriea.it/it/team/fiorentina/club">Organigramma del club</a></li>
-              </ul>
-            </div>
+  <footer class="footer-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="widget mb-3">
+            <h3>Profilo ufficiale</h3>
+            <ul class="list-unstyled links">
+              <li><a target="_blank" href="https://www.acffiorentina.com/it">Sito ufficiale Fiorentina</a></li>
+              <li><a target="_blank" href="https://www.acffiorentina.com/it/squadre/prima-squadra-maschile/tutti">Rosa del club maschile</a></li>
+              <li><a target="_blank" href="https://www.acffiorentina.com/it/squadre/squadra-femminile/tutti">Rosa del club femminile</a></li>
+              <li><a target="_blank" href="https://www.acffiorentina.com/it/contatti">Contatti del club</a></li>
+              <li><a target="_blank" href="https://www.legaseriea.it/it/team/fiorentina/club">Organigramma del club</a></li>
+            </ul>
           </div>
-          <div class="col-lg-3">
-            <div class="widget mb-3">
-              <h3>Biglietti eventi</h3>
-              <ul class="list-unstyled links">
-                <li><a target="_blank" href="https://www.bigliettifiorentina.com/">Biglietteria online</a></li>
-                <li><a target="_blank" href="https://www.bigliettifiorentina.com/corporate-hospitality/">Corporate hospitality</a></li>
-                <li><a target="_blank" href="https://acffiorentina.vivaticket.it/it/fiorentinacard">Gift card</a></li>
-                <li><a target="_blank" href="https://acffiorentina.vivaticket.it/index.php?nvpg[sellshow]&cmd=ShowTdtListType">Fidelity card</a></li>
-                <li><a target="_blank" href="https://www.abbonamentifiorentina.com/">Abbonamenti</a></li>
-              </ul>
-            </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="widget mb-3">
+            <h3>Biglietti eventi</h3>
+            <ul class="list-unstyled links">
+              <li><a target="_blank" href="https://www.bigliettifiorentina.com/">Biglietteria online</a></li>
+              <li><a target="_blank" href="https://www.bigliettifiorentina.com/corporate-hospitality/">Corporate hospitality</a></li>
+              <li><a target="_blank" href="https://acffiorentina.vivaticket.it/it/fiorentinacard">Gift card</a></li>
+              <li><a target="_blank" href="https://acffiorentina.vivaticket.it/index.php?nvpg[sellshow]&cmd=ShowTdtListType">Fidelity card</a></li>
+              <li><a target="_blank" href="https://www.abbonamentifiorentina.com/">Abbonamenti</a></li>
+            </ul>
           </div>
-          <div class="col-lg-3">
-            <div class="widget mb-3">
-              <h3>Stagione 23/24</h3>
-              <ul class="list-unstyled links">
-                <li><a target="_blank" href="https://www.acffiorentina.com/it/stagione/calendario-e-risultati/serie-a/2023">Serie A</a></li>
-                <li><a target="_blank" href="https://www.acffiorentina.com/it/stagione/calendario-e-risultati/coppa-italia/2023">Coppa Italia</a></li>
-                <li><a target="_blank" href="https://www.acffiorentina.com/it/stagione/calendario-e-risultati/super-coppa/2023">Super Coppa Italiana</a></li>
-                <li><a target="_blank" href="https://www.acffiorentina.com/it/stagione/calendario-e-risultati/conference-league/2023">Conference League</a></li>
-                <li><a target="_blank" href="https://www.acffiorentina.com/it/news/tutte/prima-squadra-maschile/2023-07-03/stagione-2023-24-programma-amichevoli">Amichevoli estive</a></li>
-              </ul>
-            </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="widget mb-3">
+            <h3>Stagione 23/24</h3>
+            <ul class="list-unstyled links">
+              <li><a target="_blank" href="https://www.acffiorentina.com/it/stagione/calendario-e-risultati/serie-a/2023">Serie A</a></li>
+              <li><a target="_blank" href="https://www.acffiorentina.com/it/stagione/calendario-e-risultati/coppa-italia/2023">Coppa Italia</a></li>
+              <li><a target="_blank" href="https://www.acffiorentina.com/it/stagione/calendario-e-risultati/super-coppa/2023">Super Coppa Italiana</a></li>
+              <li><a target="_blank" href="https://www.acffiorentina.com/it/stagione/calendario-e-risultati/conference-league/2023">Conference League</a></li>
+              <li><a target="_blank" href="https://www.acffiorentina.com/it/news/tutte/prima-squadra-maschile/2023-07-03/stagione-2023-24-programma-amichevoli">Amichevoli estive</a></li>
+            </ul>
           </div>
+        </div>
 
-          <div class="col-lg-3">
-            <div class="widget mb-3">
-              <h3>Canali Social</h3>
-              <ul class="list-unstyled links">
-                <li><a target="_blank" href="https://www.facebook.com/ACFFiorentina/">Facebook</a></li>
-                <li><a target="_blank" href="https://www.instagram.com/acffiorentina/">Instagram</a></li>
-                <li><a target="_blank" href="https://x.com/acffiorentina">X</a></li>
-                <li><a target="_blank" href="https://www.youtube.com/acffiorentina">Youtube</a></li>
-                <li><a target="_blank" href="https://www.tiktok.com/@acffiorentina">TikTok</a></li>
-              </ul>
-            </div>
+        <div class="col-lg-3">
+          <div class="widget mb-3">
+            <h3>Canali Social</h3>
+            <ul class="list-unstyled links">
+              <li><a target="_blank" href="https://www.facebook.com/ACFFiorentina/">Facebook</a></li>
+              <li><a target="_blank" href="https://www.instagram.com/acffiorentina/">Instagram</a></li>
+              <li><a target="_blank" href="https://x.com/acffiorentina">X</a></li>
+              <li><a target="_blank" href="https://www.youtube.com/acffiorentina">Youtube</a></li>
+              <li><a target="_blank" href="https://www.tiktok.com/@acffiorentina">TikTok</a></li>
+            </ul>
           </div>
         </div>
       </div>
-    </footer>
+    </div>
+  </footer>
 
   </div>
 
@@ -192,10 +187,12 @@ if(!isset($_SESSION['invalid_account'])){
       $_SESSION["invalid_account"] = 0;
       ?>
     }
+
     function ConfermaOperazione() {
       var richiesta = window.confirm("Vuoi davvero annullare il modulo?");
       return richiesta;
     }
+
     function verificaInputEConferma() {
       const inputs = document.querySelectorAll("form input[type=email], form input[type=password]");
       let valorizzato = false;
@@ -215,4 +212,5 @@ if(!isset($_SESSION['invalid_account'])){
     }
   </script>
 </body>
+
 </html>

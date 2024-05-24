@@ -7,9 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["nome"])) {
     $CF = $_POST["codice_fiscale"];
     $nome = $_POST["nome"];
     $cognome = $_POST["cognome"];
-    $numero_telefono = $_POST["telefono"];
-    //conversione numero di telefono
-    $telefono = "+" . substr($numero_telefono, 0, 2) . " " . substr($numero_telefono, 3, 3) . substr($numero_telefono, 7, 3). substr($numero_telefono, 11, 4);
+    $telefono = $_POST["telefono"];
     $data_input = $_POST["data_nascita"];
     //conversione data di nascita
     $data_nascita = date("Y-m-d", strtotime($data_input));
@@ -121,6 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["nome"])) {
         if ($password_calculated == $hash) {
             $_SESSION["invalid_account"] = 1; //account esistente
             $_SESSION["utente"] = $row_utente->Id_utente; //valorizzazione della sessione utente
+            $_SESSION["visualizza_catalogo"] = true;
             header("Location: ../dati_utente/utente.php?u=" . $_SESSION["utente"]);
             exit;
         } else {
