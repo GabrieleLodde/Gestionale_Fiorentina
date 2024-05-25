@@ -103,7 +103,7 @@ $data_corrente = date("Y-m-j");
                 <input type="text" onfocus="(this.type='date')" name="data_nascita" min="1900-01-01" max="<?php echo $data_corrente; ?>" placeholder="Data di nascita" class="form-control" data-toggle="tooltip" data-placement="top" data-html="true" title="<b>data minima</b> 01/01/1900 <b>data massima</b> odierna" required>
               </div>
               <div class="form-group">
-                <input type="email" name="email" placeholder="Email" class="form-control" required>
+                <input type="email" name="email" placeholder="Email" class="form-control" data-toggle="tooltip" data-placement="top" data-html="true" title="<b>esempio</b> luca.rossi@gmail.com" required>
               </div>
               <div class="form-group">
                 <input type="password" name="password" placeholder="Password" class="form-control" required>

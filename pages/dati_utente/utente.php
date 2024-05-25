@@ -27,7 +27,6 @@ if ($_SESSION["invalid_account"] == 1) {
   $formato = 'd/m/Y';
   $data_nascita = date($formato, $timestamp_data);
   $email = $row_utente->email;
-
   //var_dump($_SESSION["invalid_account"]);
 ?>
   <!DOCTYPE html>
@@ -157,7 +156,7 @@ if ($_SESSION["invalid_account"] == 1) {
                     <input type="text" onfocus="(this.type='date')" name="data_nascita" min="1900-01-01" max="<?php echo $data_corrente; ?>" value="<?php echo $data_nascita; ?>" class="form-control" data-toggle="tooltip" data-placement="top" data-html="true" title="<b>data minima</b> 01/01/1900 <b>data massima</b> odierna">
                   </div>
                   <div class="form-group">
-                    <input type="email" name="email" value="<?php echo $email; ?>" class="form-control">
+                    <input type="email" name="email" value="<?php echo $email; ?>" class="form-control" data-toggle="tooltip" data-placement="top" data-html="true" title="<b>esempio</b> luca.rossi@gmail.com">
                   </div>
                   <div class="form-group text-center">
                     <input type="submit" value="Salva modifiche" class="btn btn-primary py-3 px-4">
