@@ -11,8 +11,20 @@ if (isset($_SESSION["modifica_account"])) {
   }
 }
 
-if(!isset($_SESSION["invalid_prodotto"])){
+if (!isset($_SESSION["invalid_prodotto"])) {
   $_SESSION["invalid_prodotto"] = false;
+}
+
+if (!isset($_SESSION["count_articoli"])) {
+  $_SESSION["count_articoli"] = 0;
+}
+
+if (!isset($_SESSION["token"])) {
+  $_SESSION["token"] = bin2hex(random_bytes(32)); //generazione token per evitare che il contatore degli articoli si incrementi al refresh
+}
+
+if (!isset($_SESSION["articoli"])) {
+  $_SESSION["articoli"] = array();
 }
 
 $query_articoli = " SELECT A.Id_articolo, A.descrizione_articolo, A.prezzo_base, ROUND((A.prezzo_base -(A.prezzo_base/100 * S.valore)), 2) as prezzo_scontato, A.tipo, A.immagine, S.Id_sconto, S.valore  
@@ -45,13 +57,14 @@ $sth_articoli->execute();
   <link rel="stylesheet" href="../../fonts/flaticon/font/flaticon.css">
   <link rel="stylesheet" href="../../css/aos.css">
   <link rel="stylesheet" href="../../css/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
 </head>
 
 <body <?php
-        if ($_SESSION["invalid_prodotto"] == true) {
-        ?> onload="printInvalidProdotto()" <?php
-                                    }?>>
-  <di class="site-wrap">
+      if ($_SESSION["invalid_prodotto"] == true) {
+      ?> onload="printInvalidProdotto()" <?php
+                                        } ?>>
+  <div class="site-wrap">
 
     <div class="site-mobile-menu site-navbar-target">
       <div class="site-mobile-menu-header">
@@ -79,13 +92,7 @@ $sth_articoli->execute();
                 <li class="active"><a href="#" class="nav-link">Catalogo</a></li>
                 <li><a href="../serie_a/classifica.php" class="nav-link">Classifica Serie A 2023/2024</a></li>
                 <li><a href="../serie_a/highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
-                <?php
-                if ($_SESSION['invalid_account'] == 1) {
-                  echo '<li><a href="../dati_utente/utente.php?u=' . $_SESSION["utente"] . '" class="nav-link">Profilo utente</a></li>';
-                } else {
-                  echo '<li><a href="../login_registrazione/login.php" class="nav-link">Log-in</a></li>';
-                }
-                ?>
+                <li><a href="../dati_utente/utente.php?u=<?php echo $_SESSION["utente"] ?>" class="nav-link">Profilo utente</a></li>
               </ul>
             </nav>
 
@@ -108,6 +115,22 @@ $sth_articoli->execute();
 
     <section class="py-5">
       <div class="container px-4 px-lg-5 mt-5">
+        <form action="carrello.php" class="d-flex flex-row-reverse">
+          <button class="btn-outline-dark border border-white pl-3 pr-3 mb-5 custom-btn" type="submit">
+            <i class="bi-cart-fill me-1"></i>
+            Visualizza carrello
+            <span class="badge bg-dark text-white ms-1 rounded-pill">
+              <?php
+              if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["token"]) && hash_equals($_SESSION["token"], $_POST["token"])) {
+                $_SESSION["count_articoli"]++;
+                array_push($_SESSION["articoli"], $_POST["id_articolo"]);
+                $_SESSION["token"] = bin2hex(random_bytes(32)); //Genero un nuovo valore del token dopo ogni POST per evitare duplicati
+              }
+              echo $_SESSION["count_articoli"];
+              ?>
+            </span>
+          </button>
+        </form>
         <?php
         $num_articoli = $sth_articoli->rowCount();
         $count_articoli = 0;
@@ -125,15 +148,15 @@ $sth_articoli->execute();
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             <?php
             $count_per_riga = 0;
-          } 
+          }
           $count_per_riga++;
-          ?>
+            ?>
             <div class="col mb-5">
               <div class="card h-100">
                 <?php
                 if ($row_articolo->Id_sconto != 4) { ?>
                   <!-- Sale badge-->
-                  <div class="badge bg-dark text-white position-absolute mb-5" style="top: 0.5rem; right: 0.5rem">Sconto <?php echo $row_articolo->valore . "%" ?> !</div>
+                  <div class="badge bg-dark text-white position-absolute mb-5 pt-2 pb-2 pl-2 pr-2" style="top: 0.5rem; right: 0.5rem">Sconto <?php echo $row_articolo->valore . "%" ?> !</div>
                 <?php
                 }
                 ?>
@@ -148,7 +171,7 @@ $sth_articoli->execute();
                     <h5 class="fw-bolder text-black" data-html="true"><?php echo $row_articolo->descrizione_articolo ?></h5>
                     <?php if ($row_articolo->Id_sconto != 4) { ?>
                       <!-- Product price without discount-->
-                      <span class="text-muted text-decoration-line-through" ><?php echo $row_articolo->prezzo_base .  "€" ?></span>
+                      <span class="text-muted text-decoration-line-through"><?php echo $row_articolo->prezzo_base .  "€" ?></span>
                     <?php
                     } ?>
                     <!-- Product price with scount-->
@@ -168,18 +191,16 @@ $sth_articoli->execute();
                     $first_time_taglia = true;
                     while ($row_taglia = $sth_taglie->fetch(PDO::FETCH_OBJ)) {
                       $count_taglie++;
-                      if($num_taglie == 1){
+                      if ($num_taglie == 1) {
                         $stringa_taglie =  $row_taglia->descrizione_taglia;
                         break;
                       }
-                      if($first_time_taglia == true){
+                      if ($first_time_taglia == true) {
                         $stringa_taglie =  $row_taglia->descrizione_taglia . " - ";
                         $first_time_taglia = false;
-                      }
-                      else if($first_time_taglia == false && $num_taglie != $count_taglie){
+                      } else if ($first_time_taglia == false && $num_taglie != $count_taglie) {
                         $stringa_taglie = $stringa_taglie . $row_taglia->descrizione_taglia . " - ";
-                      }     
-                      else if($num_taglie == $count_taglie){
+                      } else if ($num_taglie == $count_taglie) {
                         $stringa_taglie = $stringa_taglie . $row_taglia->descrizione_taglia;
                       }
                     }
@@ -189,16 +210,22 @@ $sth_articoli->execute();
                 </div>
                 <!-- Product actions-->
                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                  <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Aggiungi al carrello</a></div>
+                  <div class="text-center">
+                    <form action="catalogo.php" method="post">
+                      <input type="hidden" name="id_articolo" value="<?php echo $row_articolo->Id_articolo ?>">
+                      <input type="hidden" name="token" value="<?php echo $_SESSION["token"]; ?>">
+                      <input class="btn btn-outline-dark mt-auto" type="submit" value="Aggiungi al carrello"></input>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
-          <?php
-          if($count_articoli == $num_articoli){ ?>
-            </div>
             <?php
-          }
-        } ?>
+            if ($count_articoli == $num_articoli) { ?>
+            </div>
+        <?php
+            }
+          } ?>
       </div>
     </section>
 
@@ -258,32 +285,32 @@ $sth_articoli->execute();
       </div>
     </footer>
 
-    </div>
-    <!-- .site-wrap -->
-    <script src="../../js/jquery-3.3.1.min.js"></script>
-    <script src="../../js/jquery-migrate-3.0.1.min.js"></script>
-    <script src="../../js/jquery-ui.js"></script>
-    <script src="../../js/popper.min.js"></script>
-    <script src="../../js/bootstrap.min.js"></script>
-    <script src="../../js/owl.carousel.min.js"></script>
-    <script src="../../js/jquery.stellar.min.js"></script>
-    <script src="../../js/jquery.countdown.min.js"></script>
-    <script src="../../js/bootstrap-datepicker.min.js"></script>
-    <script src="../../js/jquery.easing.1.3.js"></script>
-    <script src="../../js/aos.js"></script>
-    <script src="../../js/jquery.fancybox.min.js"></script>
-    <script src="../../js/jquery.sticky.js"></script>
-    <script src="../../js/jquery.mb.YTPlayer.min.js"></script>
+  </div>
+  <!-- .site-wrap -->
+  <script src="../../js/jquery-3.3.1.min.js"></script>
+  <script src="../../js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="../../js/jquery-ui.js"></script>
+  <script src="../../js/popper.min.js"></script>
+  <script src="../../js/bootstrap.min.js"></script>
+  <script src="../../js/owl.carousel.min.js"></script>
+  <script src="../../js/jquery.stellar.min.js"></script>
+  <script src="../../js/jquery.countdown.min.js"></script>
+  <script src="../../js/bootstrap-datepicker.min.js"></script>
+  <script src="../../js/jquery.easing.1.3.js"></script>
+  <script src="../../js/aos.js"></script>
+  <script src="../../js/jquery.fancybox.min.js"></script>
+  <script src="../../js/jquery.sticky.js"></script>
+  <script src="../../js/jquery.mb.YTPlayer.min.js"></script>
 
-    <script src="../../js/main.js"></script>
-    <script>
-      function printInvalidProdotto() {
-        alert("Per visualizzare un prodotto specifico devi selezionarlo!");
-        <?php
-        $_SESSION["invalid_prodotto"] = false;
-        ?>
-      }
-    </script>
+  <script src="../../js/main.js"></script>
+  <script>
+    function printInvalidProdotto() {
+      alert("Per visualizzare un prodotto specifico devi selezionarlo!");
+      <?php
+      $_SESSION["invalid_prodotto"] = false;
+      ?>
+    }
+  </script>
 </body>
 
 </html>

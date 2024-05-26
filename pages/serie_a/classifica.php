@@ -39,6 +39,7 @@ if (isset($_SESSION["modifica_account"])) {
     <link rel="stylesheet" href="../../fonts/flaticon/font/flaticon.css">
     <link rel="stylesheet" href="../../css/aos.css">
     <link rel="stylesheet" href="../../css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -66,17 +67,19 @@ if (isset($_SESSION["modifica_account"])) {
                         <nav class="site-navigation position-relative text-right" role="navigation">
                             <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
                                 <li><a href="../../index.php" class="nav-link">Home</a></li>
-                                <?php 
-                                if($_SESSION["visualizza_catalogo"] == true){
+                                <?php
+                                if ($_SESSION["visualizza_catalogo"] == true) {
                                     echo '<li><a href="../selezione_catalogo/catalogo.php" class="nav-link">Catalogo</a></li>';
-                                }?>
+                                } ?>
                                 <li class="active"><a href="#" class="nav-link">Classifica Serie A 2023/2024</a></li>
                                 <li><a href="highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
                                 <?php
-                                if ($_SESSION['invalid_account'] == 1) {
-                                    echo '<li><a href="../dati_utente/utente.php?u=' . $_SESSION["utente"] . '" class="nav-link">Profilo utente</a></li>';
-                                } else {
-                                    echo '<li><a href="../login_registrazione/login.php" class="nav-link">Log-in</a></li>';
+                                if ($_SESSION['invalid_account'] == 1) { ?>
+                                    <li><a href="../dati_utente/utente.php?u=<?php echo $_SESSION["utente"]?>" class="nav-link">Profilo utente</a></li>
+                                <?php
+                                } else { ?>
+                                    <li><a href="../login_registrazione/login.php" class="nav-link">Log-in</a></li>
+                                <?php
                                 }
                                 ?>
                             </ul>
@@ -106,7 +109,10 @@ if (isset($_SESSION["modifica_account"])) {
                             Europa League = Arancione<br><br>
                             Conference League = Verde<br><br>
                             Retrocessione = Rosso
-                        </div>">Visualizza legenda</button>
+                        </div>">
+                        <i class="bi bi-card-list"></i>
+                        Visualizza legenda
+                    </button>
                 </div>
                 <div class="row align-items-center">
                     <div class="col mx-auto text-center" style="overflow-x:auto;">

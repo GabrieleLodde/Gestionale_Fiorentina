@@ -11,7 +11,7 @@ if ($_SESSION["invalid_account"] == 1) {
   require_once("../../databases/database_progetto/Mysingleton1.php");
   $connection = Mysingleton1::getInstance();
   $Id_utente = $_GET["u"];
-  $query_utente = " SELECT CF, nome, cognome, telefono, data_nascita, email
+  $query_utente = " SELECT CF, nome, cognome, telefono, data_nascita, email, credito
                     FROM Utente
                     WHERE Id_utente = :id_utente";
   $sth_utente = $connection->prepare($query_utente);
@@ -27,6 +27,15 @@ if ($_SESSION["invalid_account"] == 1) {
   $formato = 'd/m/Y';
   $data_nascita = date($formato, $timestamp_data);
   $email = $row_utente->email;
+  $credito = $row_utente->credito;
+
+  $query_nome = " SELECT nome
+                  FROM Utente
+                  WHERE Id_utente = :id_utente";
+  $sth_nome = $connection->prepare($query_nome);
+  $sth_nome->bindParam(':id_utente', $_SESSION["utente"], PDO::PARAM_INT);
+  $sth_nome->execute();
+  $row_nome = $sth_nome->fetch(PDO::FETCH_OBJ);
   //var_dump($_SESSION["invalid_account"]);
 ?>
   <!DOCTYPE html>
@@ -101,7 +110,7 @@ if ($_SESSION["invalid_account"] == 1) {
         <div class="container">
           <div class="row align-items-center">
             <div class="col-lg-9 mx-auto text-center">
-              <h1 class="text-purple">Profilo utente</h1>
+              <h1 class="text-purple">Profilo <?php echo $row_nome->nome ?></h1>
             </div>
           </div>
         </div>
@@ -130,6 +139,9 @@ if ($_SESSION["invalid_account"] == 1) {
                   <div class="form-group">
                     <input type="email" name="email" placeholder="Email: <?php echo "$email"; ?>" class="form-control" disabled>
                   </div>
+                  <div class="form-group">
+                    <input type="text" name="credito" placeholder="Credito: <?php echo "$credito"; ?> €" class="form-control" disabled>
+                  </div>
                   <div class="form-group text-center">
                     <a href="manage_utente.php?u=<?php echo $Id_utente; ?>&r=mod" class="btn btn-primary py-3 px-5">Modifica dati</a>
                     <a href="#" onclick="confermaEliminazione('<?php echo $Id_utente; ?>')" class="btn btn-primary py-3 px-5">Elimina account</a>
@@ -157,6 +169,9 @@ if ($_SESSION["invalid_account"] == 1) {
                   </div>
                   <div class="form-group">
                     <input type="email" name="email" value="<?php echo $email; ?>" class="form-control" data-toggle="tooltip" data-placement="top" data-html="true" title="<b>esempio</b> luca.rossi@gmail.com">
+                  </div>
+                  <div class="form-group">
+                    <input type="text" name="credito" placeholder="Credito: <?php echo "$credito"; ?> €" class="form-control" disabled>
                   </div>
                   <div class="form-group text-center">
                     <input type="submit" value="Salva modifiche" class="btn btn-primary py-3 px-4">

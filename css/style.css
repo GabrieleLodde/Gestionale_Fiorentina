@@ -1238,3 +1238,57 @@ h1, h2, h3, h4, h5,
 .tooltip .tooltip-arrow::before {
   color: lightblue;
 }
+
+.custom-btn{
+  text-transform: uppercase;
+  font-size: 20px;
+  font-weight: 900;
+  border-width: 2px;
+  border-radius: 3px; 
+  color:white;}
+  .custom-btn:hover, .custom-btn:active, .custom-btn:focus {
+    outline: none;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important; }
+  .custom-btn:hover{
+    background: white;
+    color: purple;
+  }
+  .custom-btn.custom-btn-primary:hover {
+    border-color: #fff;
+    background: transparent;
+    color: #fff; }
+  .custom-btn.custom-btn-black {
+    border-width: 2px;
+    border-color: #000;
+    background: #000;
+    color: #fff; }
+    .custom-btn.custom-btn-black:hover {
+      color: #000;
+      background-color: transparent; }
+    .custom-btn.custom-btn-black.custom-btn-outline-black {
+      color: #000;
+      background-color: transparent; }
+      .custom-btn.custom-btn-black.custom-btn-outline-black:hover {
+        border-color: #000;
+        background: #000;
+        color: #fff; }
+  .custom-btn.custom-btn-white {
+    border-width: 2px;
+    border-color: #fff;
+    background: #fff;
+    color: #000; }
+    .custom-btn.custom-btn-white:hover {
+      color: #fff;
+      background-color: transparent; }
+    .custom-btn.custom-btn-white.custom-btn-outline-white {
+      color: #fff;
+      background-color: transparent; }
+      .custom-btn.custom-btn-white.custom-btn-outline-white:hover {
+        border-color: #fff;
+        background: #fff;
+        color: #000; }
+
+.spacer{
+  height:300px;
+}

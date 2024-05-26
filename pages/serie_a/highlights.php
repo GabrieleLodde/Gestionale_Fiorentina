@@ -77,7 +77,7 @@ if(isset($_SESSION["modifica_account"])){
                                 <li class="active"><a href="#" class="nav-link">Highlights Serie A 2023/2024</a></li>
                                 <?php
                                 if ($_SESSION['invalid_account'] == 1) {
-                                    echo '<li><a href="../dati_utente/utente.php?u=' . $_SESSION["utente"] . '" class="nav-link">Profilo utente</a></li>';
+                                    echo '<li><a href="../dati_utente/utente.php?u='. $_SESSION["utente"] . '" class="nav-link">Profilo utente</a></li>';
                                 } else {
                                     echo '<li><a href="../login_registrazione/login.php" class="nav-link">Log-in</a></li>';
                                 }
