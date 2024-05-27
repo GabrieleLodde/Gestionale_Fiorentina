@@ -26,6 +26,12 @@ if ($_GET["r"] == "del") {
     $sth_delete_password->bindParam(":id_password", $Id_password, PDO::PARAM_INT);
     $sth_delete_password->execute();
     $_SESSION["visualizza_catalogo"] = false; //cambio valore alla variabile di sessione per non visualizzare più il catalogo
+    $nome_cookie = "carrello_articoli_per_" . $Id_utente;
+    unset($_SESSION["articoli"]);
+    unset($_SESSION["count_articoli"]);
+    if(isset($_COOKIE[$nome_cookie])){
+        setcookie($nome_cookie, "", time() - 3600, "/");
+    }
     header("Location: ../../index.php");
     exit;
 }
@@ -33,6 +39,8 @@ if ($_GET["r"] == "del") {
 else if ($_GET["r"] == "esc") {
     $_SESSION["invalid_account"] = 2; //cambio valore alla variabile di sessione per visualizzare l'alert di "disconnessione" in index.php
     $_SESSION["visualizza_catalogo"] = false; //cambio valore alla variabile di sessione per non visualizzare più il catalogo
+    unset($_SESSION["articoli"]);
+    unset($_SESSION["count_articoli"]);
     header("Location: ../../index.php");
     exit;
 }

@@ -1,7 +1,6 @@
 <?php
-// modifica dati utente
-//eliminare account (eliminazione account)
 session_start();
+
 if (!isset($_SESSION["modifica_account"]) || !isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
   $_SESSION["modifica_account"] = 0;
   $_SESSION["invalid_CF"] = false;

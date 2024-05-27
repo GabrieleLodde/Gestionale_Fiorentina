@@ -3,8 +3,9 @@ session_start();
 require_once("../../databases/database_progetto/Mysingleton1.php");
 $connection = Mysingleton1::getInstance();
 $empty = false;
+$nome_cookie = "carrello_articoli_per_" . $_SESSION["utente"];
 
-if (empty($_SESSION["articoli"])) {
+if ($_COOKIE[$nome_cookie] == "vuoto") {
     $empty = true;
 } else {
     if (!isset($_SESSION["token"])) {
@@ -12,30 +13,49 @@ if (empty($_SESSION["articoli"])) {
     }
 
     if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["token"]) && hash_equals($_SESSION["token"], $_POST["token"])) {
-        $_SESSION["count_articoli"]--;
         $key = array_search($_POST["id_articolo"], $_SESSION["articoli"]);
         if ($key !== false) {
             array_splice($_SESSION["articoli"], $key, 1);
         }
+        $stringa_array = implode(",", $_SESSION["articoli"]);
+        $_SESSION["count_articoli"] = count($_SESSION["articoli"]); //Aggiorno il numero di articoli considerata l'avvenuta rimozione
+        if ($_SESSION["count_articoli"] == 0) {
+            $stringa_vuoto = "vuoto";
+            setcookie($nome_cookie, $stringa_vuoto, time() + (86400 * 30), "/");
+        } else {
+            //Aggiorno il valore del cookie considerata la rimozione di un articolo dal carrello
+            $id_articoli_aggiornati = $_SESSION["articoli"];
+            setcookie($nome_cookie, implode(",", $id_articoli_aggiornati), time() + (86400 * 30), "/");
+        }
         $_SESSION["token"] = bin2hex(random_bytes(32)); //Genero un nuovo valore del token dopo ogni POST per evitare duplicati
     }
 
-    $id_articoli = $_SESSION["articoli"];
-    sort($id_articoli);
-    $query_articoli = "";
-    foreach ($id_articoli as $id) {
-        $query_articoli .= "SELECT A.Id_articolo, A.descrizione_articolo, A.prezzo_base, ROUND((A.prezzo_base -(A.prezzo_base/100 * S.valore)), 2) as prezzo_scontato, A.tipo, A.immagine, S.Id_sconto, S.valore  
+    if (count($_SESSION["articoli"]) == 1) {
+        $id_articoli = implode(",",$_SESSION["articoli"]);
+        $query_articoli = " SELECT A.Id_articolo, A.descrizione_articolo, A.prezzo_base, ROUND((A.prezzo_base -(A.prezzo_base/100 * S.valore)), 2) as prezzo_scontato, A.tipo, A.immagine, S.Id_sconto, S.valore  
                             FROM Articolo A 
                             INNER JOIN Sconto S ON A.Id_sconto = S.Id_sconto
-                            WHERE A.Id_articolo = $id
-                            UNION ALL ";
-    }
-    if (!empty($_SESSION["articoli"])) {
+                            WHERE A.Id_articolo = :id_articolo";
+        $sth_articoli = $connection->prepare($query_articoli);
+        $sth_articoli->bindParam(":id_articolo", $id_articoli, PDO::PARAM_INT);
+        $sth_articoli->execute();
+    } else if (count($_SESSION["articoli"]) != 1 && count($_SESSION["articoli"]) != 0) {
+        $id_articoli = $_SESSION["articoli"];
+        sort($id_articoli);
+        $query_articoli = "";
+        foreach ($id_articoli as $id) {
+            $query_articoli .= "SELECT A.Id_articolo, A.descrizione_articolo, A.prezzo_base, ROUND((A.prezzo_base -(A.prezzo_base/100 * S.valore)), 2) as prezzo_scontato, A.tipo, A.immagine, S.Id_sconto, S.valore  
+                                FROM Articolo A 
+                                INNER JOIN Sconto S ON A.Id_sconto = S.Id_sconto
+                                WHERE A.Id_articolo = $id
+                                UNION ALL ";
+        }
         // Rimuovi l'ultima "UNION ALL" dalla query
         $query_articoli = rtrim($query_articoli, "UNION ALL ");
         $sth_articoli = $connection->prepare($query_articoli);
         $sth_articoli->execute();
-    } else {
+    }
+    else{
         $empty = true;
     }
 }
@@ -46,8 +66,6 @@ $sth_nome = $connection->prepare($query_nome);
 $sth_nome->bindParam(':id_utente', $_SESSION["utente"], PDO::PARAM_INT);
 $sth_nome->execute();
 $row_nome = $sth_nome->fetch(PDO::FETCH_OBJ);
-
-//var_dump($_SESSION["invalid_account"]);
 ?>
 
 <!DOCTYPE html>
@@ -175,9 +193,7 @@ $row_nome = $sth_nome->fetch(PDO::FETCH_OBJ);
                                     }
                                     ?>
                                     <!-- Product image-->
-                                    <a href="prodotto.php?p=<?php echo $row_articolo->Id_articolo ?>">
-                                        <img class="card-img-top" src="<?php echo $row_articolo->immagine ?>" alt="..." />
-                                    </a>
+                                    <img class="card-img-top" src="<?php echo $row_articolo->immagine ?>" alt="..." />
                                     <!-- Product details-->
                                     <div class="card-body p-4">
                                         <div class="text-center">
@@ -192,10 +208,10 @@ $row_nome = $sth_nome->fetch(PDO::FETCH_OBJ);
                                             <span class="text-danger"><?php echo $row_articolo->prezzo_scontato .  "€" ?></span>
                                             <br>
                                             <?php
-                                            $query_taglie = " SELECT T.descrizione_taglia
-                                      FROM Articolo A INNER JOIN ArticoloTaglia ART ON A.Id_articolo = ART.Id_articolo
-                                      INNER JOIN Taglia T ON ART.Id_taglia = T.Id_taglia
-                                      WHERE A.Id_articolo = :id_articolo";
+                                            $query_taglie = "   SELECT T.descrizione_taglia
+                                                                FROM Articolo A INNER JOIN ArticoloTaglia ART ON A.Id_articolo = ART.Id_articolo
+                                                                INNER JOIN Taglia T ON ART.Id_taglia = T.Id_taglia
+                                                                WHERE A.Id_articolo = :id_articolo";
                                             $sth_taglie = $connection->prepare($query_taglie);
                                             $sth_taglie->bindParam(":id_articolo", $row_articolo->Id_articolo, PDO::PARAM_INT);
                                             $sth_taglie->execute();

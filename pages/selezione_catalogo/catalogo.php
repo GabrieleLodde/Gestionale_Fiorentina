@@ -2,6 +2,9 @@
 session_start();
 require_once("../../databases/database_progetto/Mysingleton1.php");
 $connection = Mysingleton1::getInstance();
+$Id_utente = $_SESSION["utente"];
+$nome_cookie = "carrello_articoli_per_" . $Id_utente;
+
 //controllo per cambiare il valore della variabile di sessione inerente alla modifica dei dati dell'utente, 
 // perchè qualora un utente selezioni questa pagina, avendo in precedenza l'intenzione di modificare i propri dati,
 // una volta che ritorna nel proprio profilo non deve visualizzare i dati modificabili, bensì fissi
@@ -15,16 +18,30 @@ if (!isset($_SESSION["invalid_prodotto"])) {
   $_SESSION["invalid_prodotto"] = false;
 }
 
-if (!isset($_SESSION["count_articoli"])) {
+
+if ($_COOKIE[$nome_cookie] == "vuoto") {
   $_SESSION["count_articoli"] = 0;
+  $_SESSION["articoli"] = array();
+  //echo "SONO ENTRATO DOVE IL NUMERO DI ARTICOLI E' PARI A 0<br><br>";
+  //echo "HO INIZIALIZZATO L'ARRAY";
+} else {
+  //echo "SONO ENTRATO A SETTARE IL CONTATORE CON QUELLO CHE C'ERA<br><br>";
+  $array_articoli_cookie = explode(",", $_COOKIE[$nome_cookie]);
+  $_SESSION["count_articoli"] = count($array_articoli_cookie);  
+  $_SESSION["articoli"] = $array_articoli_cookie;
+  //echo "HO RIPRESO GLI ARTICOLI DAL COOKIE<br><br>";
 }
 
 if (!isset($_SESSION["token"])) {
   $_SESSION["token"] = bin2hex(random_bytes(32)); //generazione token per evitare che il contatore degli articoli si incrementi al refresh
 }
 
-if (!isset($_SESSION["articoli"])) {
-  $_SESSION["articoli"] = array();
+if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["token"]) && hash_equals($_SESSION["token"], $_POST["token"])) {
+  array_push($_SESSION["articoli"], $_POST["id_articolo"]); //aggiunta id_articolo nell'array di id_articoli
+  $id_articoli_aggiornati = $_SESSION["articoli"];
+  setcookie($nome_cookie, implode(",", $id_articoli_aggiornati), time() + (86400 * 30), "/"); //aggiornamento del valore del cookie
+  $_SESSION["count_articoli"] = count($_SESSION["articoli"]); //contatore degli articoli selezionati
+  $_SESSION["token"] = bin2hex(random_bytes(32)); //Genero un nuovo valore del token dopo ogni POST per evitare duplicati  
 }
 
 $query_articoli = " SELECT A.Id_articolo, A.descrizione_articolo, A.prezzo_base, ROUND((A.prezzo_base -(A.prezzo_base/100 * S.valore)), 2) as prezzo_scontato, A.tipo, A.immagine, S.Id_sconto, S.valore  
@@ -121,11 +138,6 @@ $sth_articoli->execute();
             Visualizza carrello
             <span class="badge bg-dark text-white ms-1 rounded-pill">
               <?php
-              if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["token"]) && hash_equals($_SESSION["token"], $_POST["token"])) {
-                $_SESSION["count_articoli"]++;
-                array_push($_SESSION["articoli"], $_POST["id_articolo"]);
-                $_SESSION["token"] = bin2hex(random_bytes(32)); //Genero un nuovo valore del token dopo ogni POST per evitare duplicati
-              }
               echo $_SESSION["count_articoli"];
               ?>
             </span>
@@ -161,9 +173,7 @@ $sth_articoli->execute();
                 }
                 ?>
                 <!-- Product image-->
-                <a href="prodotto.php?p=<?php echo $row_articolo->Id_articolo ?>">
-                  <img class="card-img-top" src="<?php echo $row_articolo->immagine ?>" alt="..." />
-                </a>
+                <img class="card-img-top" src="<?php echo $row_articolo->immagine ?>" alt="..." />
                 <!-- Product details-->
                 <div class="card-body p-4">
                   <div class="text-center">

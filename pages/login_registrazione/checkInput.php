@@ -19,20 +19,19 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["nome"])) {
         $_SESSION["invalid_CF"] = true;
         header("Location: registrazione.php");
         exit;
-    }
-    else{
+    } else {
         //controllo sulla presenza del codice fiscale (non possono esserci due codici fiscali uguali nel db)
         $query_CF = "SELECT CF
                      FROM Utente";
         $sth_check_CF = $connection->prepare($query_CF);
         $sth_check_CF->execute();
-        while($row_CF = $sth_check_CF->fetch(PDO::FETCH_OBJ)){
-            if($row_CF->CF == $CF){
+        while ($row_CF = $sth_check_CF->fetch(PDO::FETCH_OBJ)) {
+            if ($row_CF->CF == $CF) {
                 $_SESSION["invalid_CF"] = true;
                 break;
             }
         }
-        if($_SESSION["invalid_CF"] == true){
+        if ($_SESSION["invalid_CF"] == true) {
             header("Location: registrazione.php");
             exit;
         }
@@ -43,19 +42,19 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["nome"])) {
                     FROM Utente";
     $sth_check_email = $connection->prepare($query_email);
     $sth_check_email->execute();
-    while($row_email = $sth_check_email->fetch(PDO::FETCH_OBJ)){
-        if($row_email->email == $email){
+    while ($row_email = $sth_check_email->fetch(PDO::FETCH_OBJ)) {
+        if ($row_email->email == $email) {
             $_SESSION["invalid_email"] = true;
             break;
         }
     }
-    if($_SESSION["invalid_email"] == true){
+    if ($_SESSION["invalid_email"] == true) {
         header("Location: registrazione.php");
         exit;
     }
 
     //dati di registrazione corretti
-    if($_SESSION["invalid_CF"] == false && $_SESSION["invalid_email"] == false) {
+    if ($_SESSION["invalid_CF"] == false && $_SESSION["invalid_email"] == false) {
         //criptazione della password
         $salt = bin2hex(random_bytes(16));
         $iterations = random_int(10_000, 50_000);
@@ -120,6 +119,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["nome"])) {
             $_SESSION["invalid_account"] = 1; //account esistente
             $_SESSION["utente"] = $row_utente->Id_utente; //valorizzazione della sessione utente
             $_SESSION["visualizza_catalogo"] = true;
+            //creazione del cookie per l'utente
+            $nome_cookie = "carrello_articoli_per_" . $_SESSION["utente"];
+            if(!isset($_COOKIE[$nome_cookie])){
+                setcookie($nome_cookie, "vuoto", time() + (86400 * 30), "/");
+            }
             header("Location: ../dati_utente/utente.php?u=" . $_SESSION["utente"]);
             exit;
         } else {

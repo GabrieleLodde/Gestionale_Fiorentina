@@ -13,7 +13,8 @@ sconfitte INT DEFAULT 0,
 goal_fatti INT DEFAULT 0,
 goal_subiti INT DEFAULT 0,
 differenza_reti INT DEFAULT 0,
-numero_punti INT DEFAULT 0);
+numero_punti INT DEFAULT 0,
+ordine_punti_uguali INT);
 
 CREATE TABLE Risultati(
 id_risultato INT AUTO_INCREMENT PRIMARY KEY,
@@ -29,27 +30,27 @@ FOREIGN KEY (id_squadra_ospite) REFERENCES Squadre(id_squadra)
 ON DELETE CASCADE ON UPDATE CASCADE);
 
 INSERT 
-INTO Squadre(nome, logo_squadra, partite_giocate, vittorie, pareggi, sconfitte, goal_fatti, goal_subiti, differenza_reti, numero_punti)
-VALUES	("Atalanta", "loghi/Logo_Atalanta.png", 36, 20, 6, 10, 67, 39, 28, 66),
-		("Bologna", "loghi/Logo_Bologna.png", 38, 18, 14, 6, 54, 32, 22, 68),
-        ("Cagliari", "loghi/Logo_Cagliari.png", 38, 8, 12, 18, 42, 68, -26, 36),
-        ("Empoli", "loghi/Logo_Empoli.png", 37, 8, 9, 20, 27, 53, -26, 33),
-        ("Fiorentina", "loghi/Logo_Fiorentina.png", 37, 16, 9, 12, 58, 44, 14, 57),
-        ("Frosinone", "loghi/Logo_Frosinone.png", 37, 8, 11, 18, 44, 68, -24, 35),
-        ("Genoa", "loghi/Logo_Genoa.png", 38, 12, 13, 13, 45, 45, 0, 49),
-        ("Inter", "loghi/Logo_Inter.png", 37, 29, 6, 2, 87, 20, 67, 93),
-        ("Juventus", "loghi/Logo_Juventus.png", 38, 19, 14, 5, 54, 31, 23, 71),
-        ("Lazio", "loghi/Logo_Lazio.png", 37, 18, 6, 13, 48, 38, 10, 60),
-        ("Lecce", "loghi/Logo_Lecce.png", 37, 8, 13, 16, 32, 54, -22, 37),
-        ("Milan", "loghi/Logo_Milan.png", 38, 22, 9, 7, 76, 49, 27, 75),
-        ("Monza", "loghi/Logo_Monza.png", 38, 11, 12, 15, 39, 51, -12, 45),
-        ("Napoli", "loghi/Logo_Napoli.png", 37, 13, 13, 11, 55, 48, 7, 52),
-        ("Roma", "loghi/Logo_Roma.png", 37, 18, 9, 10, 64, 44, 20, 63),
-        ("Salernitana", "loghi/Logo_Salernitana.png", 38, 2, 11, 25, 32, 81, -49, 17),
-        ("Sassuolo", "loghi/Logo_Sassuolo.png", 37, 7, 8, 22, 42, 74, -32, 29),
-        ("Torino", "loghi/Logo_Torino.png", 37, 13, 14, 10, 36, 33, 3, 53),
-        ("Udinese", "loghi/Logo_Udinese.png", 37, 5, 19, 13, 36, 53, -17, 34),
-        ("Hellas Verona", "loghi/Logo_Hellas Verona.png", 37, 9, 10, 18, 36, 49, -13, 37);
+INTO Squadre(nome, logo_squadra, partite_giocate, vittorie, pareggi, sconfitte, goal_fatti, goal_subiti, differenza_reti, numero_punti, ordine_punti_uguali)
+VALUES	("Atalanta", "loghi/Logo_Atalanta.png", 37, 21, 6, 10, 70, 39, 31, 69, 0),
+		("Bologna", "loghi/Logo_Bologna.png", 38, 18, 14, 6, 54, 32, 22, 68, 0),
+        ("Cagliari", "loghi/Logo_Cagliari.png", 38, 8, 12, 18, 42, 68, -26, 36, 5),
+        ("Empoli", "loghi/Logo_Empoli.png", 38, 9, 9, 20, 29, 54, -25, 36, 6),
+        ("Fiorentina", "loghi/Logo_Fiorentina.png", 37, 16, 9, 12, 58, 44, 14, 57, 0),
+        ("Frosinone", "loghi/Logo_Frosinone.png", 38, 8, 11, 19, 44, 69, -25, 35, 0),
+        ("Genoa", "loghi/Logo_Genoa.png", 38, 12, 13, 13, 45, 45, 0, 49, 0),
+        ("Inter", "loghi/Logo_Inter.png", 38, 29, 7, 2, 89, 22, 67, 94, 0),
+        ("Juventus", "loghi/Logo_Juventus.png", 38, 19, 14, 5, 54, 31, 23, 71, 0),
+        ("Lazio", "loghi/Logo_Lazio.png", 38, 18, 7, 13, 49, 39, 10, 61, 0),
+        ("Lecce", "loghi/Logo_Lecce.png", 38, 8, 14, 16, 32, 54, -22, 38, 4),
+        ("Milan", "loghi/Logo_Milan.png", 38, 22, 9, 7, 76, 49, 27, 75, 0),
+        ("Monza", "loghi/Logo_Monza.png", 38, 11, 12, 15, 39, 51, -12, 45, 0),
+        ("Napoli", "loghi/Logo_Napoli.png", 38, 13, 14, 11, 55, 48, 7, 53, 2),
+        ("Roma", "loghi/Logo_Roma.png", 38, 18, 9, 11, 65, 46, 19, 63, 0),
+        ("Salernitana", "loghi/Logo_Salernitana.png", 38, 2, 11, 25, 32, 81, -49, 17, 0),
+        ("Sassuolo", "loghi/Logo_Sassuolo.png", 38, 7, 9, 22, 43, 75, -32, 30, 0),
+        ("Torino", "loghi/Logo_Torino.png", 38, 13, 14, 11, 36, 36, 0, 53, 1),
+        ("Udinese", "loghi/Logo_Udinese.png", 38, 6, 19, 13, 37, 53, -16, 37, 0),
+        ("Hellas Verona", "loghi/Logo_Hellas Verona.png", 38, 9, 11, 18, 38, 51, -13, 38, 3);
         
         
 INSERT
@@ -489,7 +490,7 @@ VALUES
         
         -- TRENTASETTESIMA GIORNATA
         (5, 14, 2, 2, "../../images/fiorentina_napoli.jpg", "https://www.youtube.com/watch?v=ep7vUzCVXSc&pp=ygUVZmlvcmVudGluYSBuYXBvbGkgMiAy"),
-        (11, 1, 0, 2, "../../images/lecce_atalanta.jpg", ""),
+        (11, 1, 0, 2, "../../images/lecce_atalanta.jpg", "https://www.youtube.com/watch?v=a_NLk-FYEfM&pp=ygUSbGVjY2UgYXRhbGFudGEgMCAy"),
         (18, 12, 3, 1, "../../images/torino_milan.jpg", "https://www.youtube.com/watch?v=N9HQxIIkOP8&pp=ygUbdG9yaW5vIG1pbGFuIDMgMSBoaWdobGlnaHRz"),
         (17, 3, 0, 2, "../../images/sassuolo_cagliari.jpg", "https://www.youtube.com/watch?v=YJw59wNZHrI&pp=ygUgc2Fzc3VvbG8gY2FnbGlhcmkgMCAyIGhpZ2hsaWdodHM%3D"),
         (19, 4, 1, 1, "../../images/udinese_empoli.jpg", "https://www.youtube.com/watch?v=QMraj4zDFaA&pp=ygUSdWRpbmVzZSBlbXBvbGkgMSAx"),
@@ -503,10 +504,10 @@ VALUES
         (3, 5, 2, 3, "../../images/cagliari_fiorentina.jpg", "https://www.youtube.com/watch?v=AY8cMiyRKag&pp=ygUeaGlnaGxpZ2h0cyBjYWdsaWFyaSBmaW9yZW50aW5h"),
         (7, 2, 2, 0, "../../images/genoa_bologna.jpg", "https://www.youtube.com/watch?v=IcEMBHCDPUo&pp=ygUYZ2Vub2EgYm9sb2duYSBoaWdobGlnaHRz"),
         (9, 13, 2, 0, "../../images/juventus_monza.jpg", "https://www.youtube.com/watch?v=efW7jY_29kY&pp=ygUZanV2ZW50dXMgbW9uemEgaGlnaGxpZ2h0cw%3D%3D"),
-        (12, 16, 3, 3, "../../images/milan_salernitana.jpg", "https://www.youtube.com/watch?v=zaC7FPvpK6Q&pp=ygUcbWlsYW4gc2FsZXJuaXRhbmEgaGlnaGxpZ2h0cw%3D%3D");
-        -- (4, 15, ---, ---, "../../images/empoli_roma.jpg", ""),
-        -- (1, 18, ---, ---, "../../images/atalanta_torino.jpg", ""),
-        -- (14, 11, ---, ---, "../../images/napoli_lecce.jpg", ""),
-        -- (6, 19, ---, ---, "../../images/frosinone_udinese.jpg", ""),
-        -- (20, 8, ---, ---, "../../images/verona_inter.jpg", ""),
-        -- (10, 17, ---, ---, "../../images/lazio_sassuolo.jpg", "");
+        (12, 16, 3, 3, "../../images/milan_salernitana.jpg", "https://www.youtube.com/watch?v=zaC7FPvpK6Q&pp=ygUcbWlsYW4gc2FsZXJuaXRhbmEgaGlnaGxpZ2h0cw%3D%3D"),
+        (1, 18, 3, 0, "../../images/atalanta_torino.jpg", "https://www.youtube.com/watch?v=VL3mpA5AT88&pp=ygUbYXRhbGFudGEgdG9yaW5vIGhpZ2hsaWdodHMg"),
+        (14, 11, 0, 0, "../../images/napoli_lecce.jpg", "https://www.youtube.com/watch?v=raP3yvc87yI&pp=ygURbmFwb2xpIGxlY2NlIDAgMCA%3D"),
+        (4, 15, 2, 1, "../../images/empoli_roma.jpg", "https://www.youtube.com/watch?v=OCOws_T8SRE&pp=ygUPZW1wb2xpIHJvbWEgMiAx"),
+        (6, 19, 0, 1, "../../images/frosinone_udinese.jpg", "https://www.youtube.com/watch?v=oXnBMcQzbB4&pp=ygUVZnJvc2lub25lIHVkaW5lc2UgMCAx"),
+        (20, 8, 2, 2, "../../images/verona_inter.jpg", "https://www.youtube.com/watch?v=Jpzc4t7Lddg&pp=ygURdmVyb25hIGludGVyIDIgMiA%3D"),
+        (10, 17, 1, 1, "../../images/lazio_sassuolo.jpg", "https://www.youtube.com/watch?v=OfCi7Hvtco8&pp=ygULc2Fzc3VvbG8gZmM%3D");

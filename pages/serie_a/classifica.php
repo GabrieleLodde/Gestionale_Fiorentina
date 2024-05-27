@@ -4,7 +4,7 @@ require_once("../../databases/database_partite/Mysingleton.php");
 $connection = Mysingleton::getInstance();
 $select_classifica = "SELECT * 
                       FROM Squadre 
-                      ORDER BY numero_punti DESC, differenza_reti DESC, goal_fatti DESC";
+                      ORDER BY numero_punti DESC, ordine_punti_uguali ASC";
 $sth_classifica = $connection->prepare($select_classifica);
 $sth_classifica->execute();
 
