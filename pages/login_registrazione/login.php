@@ -56,7 +56,7 @@ session_start();
                 <li><a href="../../index.php" class="nav-link">Home</a></li>
                 <li><a href="../serie_a/classifica.php" class="nav-link">Classifica Serie A 2023/2024</a></li>
                 <li><a href="../serie_a/highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
-                <li class="active"><a href="registrazione.php" class="nav-link">Registrazione</a></li>
+                <li class="active"><a href="#" class="nav-link">Log-in</a></li>
               </ul>
             </nav>
 

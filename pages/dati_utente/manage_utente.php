@@ -29,10 +29,11 @@ if ($_GET["r"] == "del") {
     $nome_cookie = "carrello_articoli_per_" . $Id_utente;
     unset($_SESSION["articoli"]);
     unset($_SESSION["count_articoli"]);
+    unset($_SESSION["somma"]);
     if(isset($_COOKIE[$nome_cookie])){
         setcookie($nome_cookie, "", time() - 3600, "/");
     }
-    header("Location: ../../index.php");
+    header("Location: ../../index.php", true, 301);
     exit;
 }
 //disconnetti account
@@ -41,27 +42,36 @@ else if ($_GET["r"] == "esc") {
     $_SESSION["visualizza_catalogo"] = false; //cambio valore alla variabile di sessione per non visualizzare più il catalogo
     unset($_SESSION["articoli"]);
     unset($_SESSION["count_articoli"]);
-    header("Location: ../../index.php");
+    unset($_SESSION["somma"]);
+    header("Location: ../../index.php", true, 301);
     exit;
 }
 //modifica dati
 else if ($_GET["r"] == "mod") {
     $_SESSION["modifica_account"] = 1;
-    header("Location: utente.php?u=$Id_utente");
+    header("Location: utente.php?u=$Id_utente", true, 301);
     exit;
 }
 //mantieni dati originari
 else if ($_GET["r"] == "mod_esc") {
     $_SESSION["modifica_account"] = 0;
-    header("Location: utente.php?u=$Id_utente");
+    header("Location: utente.php?u=$Id_utente", true, 301);
     exit;
 }
 //gestione modifica dati dell'account
 else if ($_SERVER['REQUEST_METHOD'] == "POST" && $_GET["r"] == "save") {
     $CF = $_POST["codice_fiscale"];
+    $nome = $_POST["nome"];
+    $cognome = $_POST["cognome"];
+    $telefono = $_POST["telefono"];
+    $data_input = $_POST["data_nascita"];
+    //conversione data di nascita
+    $data_nascita = date("Y-m-d", strtotime($data_input));
+    $email = $_POST["email"];
+    
     if (strlen($CF) != 16) {
         $_SESSION["invalid_CF"] = true;
-        header("Location: utente.php?u=$Id_utente");
+        header("Location: utente.php?u=$Id_utente", true, 301);
         exit;
     } else {
         //controllo sulla presenza del codice fiscale (non possono esserci due codici fiscali uguali nel db)
@@ -78,17 +88,29 @@ else if ($_SERVER['REQUEST_METHOD'] == "POST" && $_GET["r"] == "save") {
             }
         }
         if ($_SESSION["invalid_CF"] == true) {
-            header("Location: utente.php?u=$Id_utente");
+            header("Location: utente.php?u=$Id_utente", true, 301);
             exit;
         }
     }
-    $nome = $_POST["nome"];
-    $cognome = $_POST["cognome"];
-    $telefono = $_POST["telefono"];
-    $data_input = $_POST["data_nascita"];
-    //conversione data di nascita
-    $data_nascita = date("Y-m-d", strtotime($data_input));
-    $email = $_POST["email"];
+    
+    //controllo sulla presenza del numero di telefono (non possono esserci due numeri di telefono uguali nel db)
+    $query_telefono = "SELECT telefono
+                       FROM Utente
+                       WHERE Id_utente <> :id_utente";
+    $sth_check_telefono = $connection->prepare($query_telefono);
+    $sth_check_telefono->bindParam(":id_utente", $Id_utente, PDO::PARAM_INT);
+    $sth_check_telefono->execute();
+    while ($row_telefono = $sth_check_telefono->fetch(PDO::FETCH_OBJ)) {
+        if ($row_telefono->telefono == $telefono) {
+            $_SESSION["invalid_telefono"] = true;
+            break;
+        }
+    }
+    if ($_SESSION["invalid_telefono"] == true) {
+        header("Location: utente.php?u=$Id_utente", true, 301);
+        exit;
+    }
+    
     //controllo sulla presenza della mail (non possono esserci due email uguali nel db)
     $query_email = "SELECT email
                     FROM Utente
@@ -103,10 +125,10 @@ else if ($_SERVER['REQUEST_METHOD'] == "POST" && $_GET["r"] == "save") {
         }
     }
     if ($_SESSION["invalid_email"] == true) {
-        header("Location: utente.php?u=$Id_utente");
+        header("Location: utente.php?u=$Id_utente", true, 301);
         exit;
     }
-    if($_SESSION["invalid_CF"] == false && $_SESSION["invalid_email"] == false){
+    if($_SESSION["invalid_CF"] == false && $_SESSION["invalid_email"] == false && $_SESSION["invalid_telefono"] == false){
         $query_utente = '   UPDATE Utente 
                             SET CF = :codice_fiscale, nome = :nome, cognome = :cognome, telefono = :telefono, data_nascita = :data_nascita, email = :email
                             WHERE Id_utente = :id_utente';
@@ -120,7 +142,7 @@ else if ($_SERVER['REQUEST_METHOD'] == "POST" && $_GET["r"] == "save") {
         $sth_utente->bindParam(":id_utente", $Id_utente, PDO::PARAM_INT);
         $sth_utente->execute();
         $_SESSION["modifica_account"] = 0;
-        header("Location: utente.php?u=$Id_utente");
+        header("Location: utente.php?u=$Id_utente", true, 301);
         exit;
     }
 }

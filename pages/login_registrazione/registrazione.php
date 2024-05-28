@@ -1,17 +1,17 @@
 <?php
 session_start();
-if (!isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
+if (!isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"]) || !isset($_SESSION["invalid_telefono"])) {
   $_SESSION["invalid_CF"] = false;
   $_SESSION["invalid_email"] = false;
+  $_SESSION["invalid_telefono"] = false;
 }
 $data_corrente = date("Y-m-j");
-//var_dump($_SESSION["invalid_account"]);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+  <head>
   <title>Pagina registrazione</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -29,15 +29,17 @@ $data_corrente = date("Y-m-j");
   <link rel="stylesheet" href="../../fonts/flaticon/font/flaticon.css">
   <link rel="stylesheet" href="../../css/aos.css">
   <link rel="stylesheet" href="../../css/style.css">
-</head>
+  </head>
 
-<body <?php
-      if ($_SESSION["invalid_CF"] == true) {
-      ?> onload="printInvalidCF()" <?php
-                                  } else if ($_SESSION["invalid_email"] == true) {
-                                    ?> onload="printInvalidEmail()" <?php
-                                                                  }
-                                                                    ?>>
+  <body <?php
+        if ($_SESSION["invalid_CF"] == true) {
+          ?> onload="printInvalidCF()" <?php
+        } else if ($_SESSION["invalid_email"] == true) {
+          ?> onload="printInvalidEmail()" <?php
+        } else if ($_SESSION["invalid_telefono"] == true) {
+          ?> onload="printInvalidTelefono()" <?php
+        }
+        ?>>
   <div class="site-wrap">
 
     <div class="site-mobile-menu site-navbar-target">
@@ -64,7 +66,7 @@ $data_corrente = date("Y-m-j");
                 <li><a href="../../index.php" class="nav-link">Home</a></li>
                 <li><a href="../serie_a/classifica.php" class="nav-link">Classifica Serie A 2023/2024</a></li>
                 <li><a href="../serie_a/highlights.php" class="nav-link">Highlights Serie A 2023/2024</a></li>
-                <li class="active"><a href="login.php" class="nav-link">Log-in</a></li>
+                <li class="active"><a href="#" class="nav-link">Registrazione</a></li>
               </ul>
             </nav>
             <a href="#" class="d-inline-block d-lg-none site-menu-toggle js-menu-toggle text-black float-right text-white"><span class="icon-menu h3 text-white"></span></a>
@@ -218,6 +220,13 @@ $data_corrente = date("Y-m-j");
       alert("Attenzione, l'email non è valida!");
       <?php
       $_SESSION["invalid_email"] = false;
+      ?>
+    }
+
+    function printInvalidTelefono() {
+      alert("Attenzione, il numero di telefono non è valido!");
+      <?php
+      $_SESSION["invalid_telefono"] = false;
       ?>
     }
 

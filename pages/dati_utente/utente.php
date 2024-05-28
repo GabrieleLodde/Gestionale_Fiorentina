@@ -1,10 +1,11 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["modifica_account"]) || !isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"])) {
+if (!isset($_SESSION["modifica_account"]) || !isset($_SESSION["invalid_CF"]) || !isset($_SESSION["invalid_email"]) || !isset($_SESSION["invalid_telefono"])) {
   $_SESSION["modifica_account"] = 0;
   $_SESSION["invalid_CF"] = false;
   $_SESSION["invalid_email"] = false;
+  $_SESSION["invalid_telefono"] = false;
 }
 if ($_SESSION["invalid_account"] == 1) {
   require_once("../../databases/database_progetto/Mysingleton1.php");
@@ -27,21 +28,12 @@ if ($_SESSION["invalid_account"] == 1) {
   $data_nascita = date($formato, $timestamp_data);
   $email = $row_utente->email;
   $credito = $row_utente->credito;
-
-  $query_nome = " SELECT nome
-                  FROM Utente
-                  WHERE Id_utente = :id_utente";
-  $sth_nome = $connection->prepare($query_nome);
-  $sth_nome->bindParam(':id_utente', $_SESSION["utente"], PDO::PARAM_INT);
-  $sth_nome->execute();
-  $row_nome = $sth_nome->fetch(PDO::FETCH_OBJ);
-  //var_dump($_SESSION["invalid_account"]);
 ?>
   <!DOCTYPE html>
   <html lang="en">
 
   <head>
-    <title>Pagina utente</title>
+    <title>Profilo <?php echo $row_utente->nome; ?></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" type="image/x-icon" href="../../images/logo.png">
@@ -62,11 +54,13 @@ if ($_SESSION["invalid_account"] == 1) {
 
   <body <?php
         if ($_SESSION["invalid_CF"] == true) {
-        ?> onload="printInvalidCF()" <?php
-                                    } else if ($_SESSION["invalid_email"] == true) {
-                                      ?> onload="printInvalidEmail()" <?php
-                                                                      }
-                                                                        ?>>
+          ?> onload="printInvalidCF()" <?php
+        } else if ($_SESSION["invalid_email"] == true) {
+          ?> onload="printInvalidEmail()" <?php
+        } else if ($_SESSION["invalid_telefono"] == true) {
+          ?> onload="printInvalidTelefono()" <?php
+        }
+        ?>>
     <div class="site-wrap">
 
       <div class="site-mobile-menu site-navbar-target">
@@ -109,7 +103,7 @@ if ($_SESSION["invalid_account"] == 1) {
         <div class="container">
           <div class="row align-items-center">
             <div class="col-lg-9 mx-auto text-center">
-              <h1 class="text-purple">Profilo <?php echo $row_nome->nome ?></h1>
+              <h1 class="text-purple">Profilo <?php echo $row_utente->nome ?></h1>
             </div>
           </div>
         </div>
@@ -269,6 +263,27 @@ if ($_SESSION["invalid_account"] == 1) {
       });
     </script>
     <script>
+      function printInvalidCF() {
+        alert("Attenzione, il codice fiscale non è valido!");
+        <?php
+        $_SESSION["invalid_CF"] = false;
+        ?>
+      }
+
+      function printInvalidEmail() {
+        alert("Attenzione, l'email non è valida!");
+        <?php
+        $_SESSION["invalid_email"] = false;
+        ?>
+      }
+
+      function printInvalidTelefono() {
+        alert("Attenzione, il numero di telefono non è valido!");
+        <?php
+        $_SESSION["invalid_telefono"] = false;
+        ?>
+      }
+
       function confermaEliminazione(idUtente) {
         // Mostra un alert di conferma
         if (confirm("Vuoi davvero eliminare definitivamente questo account?")) {
@@ -301,20 +316,6 @@ if ($_SESSION["invalid_account"] == 1) {
           window.location.href = 'manage_utente.php?u=' + idUtente + '&r=mod_esc';
         }
       }
-
-      function printInvalidCF() {
-        alert("Attenzione, il codice fiscale non è valido!");
-        <?php
-        $_SESSION["invalid_CF"] = false;
-        ?>
-      }
-
-      function printInvalidEmail() {
-        alert("Attenzione, l'email non è valida!");
-        <?php
-        $_SESSION["invalid_email"] = false;
-        ?>
-      }
     </script>
   </body>
 
@@ -322,5 +323,5 @@ if ($_SESSION["invalid_account"] == 1) {
 <?php
 } else {
   $_SESSION["invalid_request"] = -1; //richiesta della pagina senza essere in una sessione specifica
-  header("Location: ../../index.php");
+  header("Location: ../../index.php", true, 301);
 }

@@ -13,25 +13,27 @@ if ($_COOKIE[$nome_cookie] == "vuoto") {
     }
 
     if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["token"]) && hash_equals($_SESSION["token"], $_POST["token"])) {
+        //rimozione di un articolo dal carrello
         $key = array_search($_POST["id_articolo"], $_SESSION["articoli"]);
         if ($key !== false) {
             array_splice($_SESSION["articoli"], $key, 1);
         }
         $stringa_array = implode(",", $_SESSION["articoli"]);
-        $_SESSION["count_articoli"] = count($_SESSION["articoli"]); //Aggiorno il numero di articoli considerata l'avvenuta rimozione
+        $_SESSION["count_articoli"] = count($_SESSION["articoli"]); //aggiornamento del numero di articoli considerata l'avvenuta rimozione
         if ($_SESSION["count_articoli"] == 0) {
             $stringa_vuoto = "vuoto";
             setcookie($nome_cookie, $stringa_vuoto, time() + (86400 * 30), "/");
         } else {
-            //Aggiorno il valore del cookie considerata la rimozione di un articolo dal carrello
+            //aggiornamento del valore del cookie considerata la rimozione di un articolo dal carrello
             $id_articoli_aggiornati = $_SESSION["articoli"];
             setcookie($nome_cookie, implode(",", $id_articoli_aggiornati), time() + (86400 * 30), "/");
         }
-        $_SESSION["token"] = bin2hex(random_bytes(32)); //Genero un nuovo valore del token dopo ogni POST per evitare duplicati
+        $_SESSION["token"] = bin2hex(random_bytes(32)); //generazione di un nuovo valore del token dopo ogni POST per evitare duplicati
     }
 
+    //controlli per verificare se e quale query effettuare per visualizzare o meno gli articoli del carrello
     if (count($_SESSION["articoli"]) == 1) {
-        $id_articoli = implode(",",$_SESSION["articoli"]);
+        $id_articoli = implode(",", $_SESSION["articoli"]);
         $query_articoli = " SELECT A.Id_articolo, A.descrizione_articolo, A.prezzo_base, ROUND((A.prezzo_base -(A.prezzo_base/100 * S.valore)), 2) as prezzo_scontato, A.tipo, A.immagine, S.Id_sconto, S.valore  
                             FROM Articolo A 
                             INNER JOIN Sconto S ON A.Id_sconto = S.Id_sconto
@@ -50,15 +52,14 @@ if ($_COOKIE[$nome_cookie] == "vuoto") {
                                 WHERE A.Id_articolo = $id
                                 UNION ALL ";
         }
-        // Rimuovi l'ultima "UNION ALL" dalla query
-        $query_articoli = rtrim($query_articoli, "UNION ALL ");
+        $query_articoli = rtrim($query_articoli, "UNION ALL "); // rimozione dell'ultima "UNION ALL" dalla query
         $sth_articoli = $connection->prepare($query_articoli);
         $sth_articoli->execute();
-    }
-    else{
+    } else {
         $empty = true;
     }
 }
+//query per visualizzare il nome dell'utente
 $query_nome = " SELECT nome
                 FROM Utente
                 WHERE Id_utente = :id_utente";
@@ -72,7 +73,7 @@ $row_nome = $sth_nome->fetch(PDO::FETCH_OBJ);
 <html lang="en">
 
 <head>
-    <title>Pagina catalogo</title>
+    <title>Pagina carrello</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" type="image/x-icon" href="../../images/logo.png">
@@ -136,7 +137,7 @@ $row_nome = $sth_nome->fetch(PDO::FETCH_OBJ);
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-9 mx-auto text-center">
-                        <h1 class="text-purple">Carrello di <?php echo $row_nome->nome ?></h1>
+                        <h1 class="text-purple">Carrello di <?php echo strtoupper($row_nome->nome) ?></h1>
                     </div>
                 </div>
             </div>
@@ -185,15 +186,30 @@ $row_nome = $sth_nome->fetch(PDO::FETCH_OBJ);
                             ?>
                             <div class="col-lg-4 col-md-6 mb-5">
                                 <div class="card h-100">
-                                    <?php
-                                    if ($row_articolo->Id_sconto != 4) { ?>
+                                    <div class="position-relative">
+                                        <!-- Product image-->
+                                        <img class="card-img-top" src="<?php echo $row_articolo->immagine ?>" alt="...">
+                                        <!-- Badge on the image -->
+                                        <div class="badge bg-secondary text-white position-absolute mb-5 pt-2 pb-2 pl-2 pr-2" style="bottom: 0.5rem; right: 0.5rem"><?php echo $row_articolo->tipo; 
+                                        if($row_articolo->tipo == "UOMO"){ ?>
+                                            <i class="bi bi-gender-male"></i>
+                                        <?php
+                                        } else if($row_articolo->tipo == "DONNA"){ ?>
+                                            <i class="bi bi-gender-female"></i>
+                                        <?php
+                                        } else if($row_articolo->tipo == "BAMBINO"){ ?>
+                                            <i class="bi-emoji-smile"></i>
+                                        <?php
+                                        } else if($row_articolo->tipo == "KIT GARA"){ ?>
+                                            <i class="bi-trophy"></i>
+                                        <?php
+                                        }
+                                        ?></div>
+                                        <?php if ($row_articolo->Id_sconto != 4) { ?>
                                         <!-- Sale badge-->
                                         <div class="badge bg-dark text-white position-absolute mb-5 pt-2 pb-2 pl-2 pr-2" style="top: 0.5rem; right: 0.5rem">Sconto <?php echo $row_articolo->valore . "%" ?> !</div>
-                                    <?php
-                                    }
-                                    ?>
-                                    <!-- Product image-->
-                                    <img class="card-img-top" src="<?php echo $row_articolo->immagine ?>" alt="..." />
+                                        <?php } ?>
+                                    </div>
                                     <!-- Product details-->
                                     <div class="card-body p-4">
                                         <div class="text-center">

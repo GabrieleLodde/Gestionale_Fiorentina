@@ -11,7 +11,7 @@ body {
   color: purple; }
 
 ::selection {
-  background: black;
+  background: lightskyblue;
   color: purple; }
 
 a {
@@ -1291,4 +1291,60 @@ h1, h2, h3, h4, h5,
 
 .spacer{
   height:300px;
+}
+
+.spacer2{
+  height: 100px;
+}
+
+.text-payment{
+  font-size: 25px;
+  color:white;
+  font-weight: 900;
+}
+
+.text-payment-method{
+  font-size: 16px;
+  color:lightcoral;
+  font-weight: 600;
+}
+
+.text-payment-field{
+  font-size: 20px;
+  color:lightblue;
+  font-weight: 700;
+}
+
+.text-small{
+  font-size: 15px;
+  color:gray;
+}
+
+.custom-container {
+  max-width: 1500px; 
+  width: 100%;
+}
+
+.text-description{
+  font-size: 13px;
+  color:darkmagenta;
+  font-weight: 500;
+}
+
+.text-sum{
+  font-size: 20px;
+  color:darkred;
+  font-weight: 700;
+}
+
+.text-button{
+  font-size: 18px;
+  color:white;
+  font-weight: 700;
+}
+
+.text-price{
+  font-size: 16px;
+  color:grey;
+  font-weight: 600;
 }

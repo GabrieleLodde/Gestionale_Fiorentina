@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["nome"])) {
     //controllo sulla lunghezza del codice fiscale
     if (strlen($CF) != 16) {
         $_SESSION["invalid_CF"] = true;
-        header("Location: registrazione.php");
+        header("Location: registrazione.php", true, 301);
         exit;
     } else {
         //controllo sulla presenza del codice fiscale (non possono esserci due codici fiscali uguali nel db)
@@ -32,9 +32,25 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["nome"])) {
             }
         }
         if ($_SESSION["invalid_CF"] == true) {
-            header("Location: registrazione.php");
+            header("Location: registrazione.php", true, 301);
             exit;
         }
+    }
+
+    //controllo sulla presenza del numero di telefono (non possono esserci due numeri di telefono uguali nel db)
+    $query_telefono = "SELECT telefono
+                       FROM Utente";
+    $sth_check_telefono = $connection->prepare($query_telefono);
+    $sth_check_telefono->execute();
+    while ($row_telefono = $sth_check_telefono->fetch(PDO::FETCH_OBJ)) {
+        if ($row_telefono->telefono == $telefono) {
+            $_SESSION["invalid_telefono"] = true;
+            break;
+        }
+    }
+    if ($_SESSION["invalid_telefono"] == true) {
+        header("Location: registrazione.php", true, 301);
+        exit;
     }
 
     //controllo sulla presenza della mail (non possono esserci due email uguali nel db)
@@ -49,12 +65,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["nome"])) {
         }
     }
     if ($_SESSION["invalid_email"] == true) {
-        header("Location: registrazione.php");
+        header("Location: registrazione.php", true, 301);
         exit;
     }
 
     //dati di registrazione corretti
-    if ($_SESSION["invalid_CF"] == false && $_SESSION["invalid_email"] == false) {
+    if ($_SESSION["invalid_CF"] == false && $_SESSION["invalid_email"] == false && $_SESSION["invalid_telefono"] == false) {
         //criptazione della password
         $salt = bin2hex(random_bytes(16));
         $iterations = random_int(10_000, 50_000);
@@ -82,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["nome"])) {
         $sth_utente->bindParam(":email", $email, PDO::PARAM_STR);
         $sth_utente->bindParam(":id_password", $last_index, PDO::PARAM_STR);
         $sth_utente->execute();
-        header("Location: login.php");
+        header("Location: login.php", true, 301);
     }
 } else if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["email_login"])) {
     //gestione login utente
@@ -98,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["nome"])) {
     $row_utente = $sth_email->fetch(PDO::FETCH_OBJ);
     if ($sth_email->rowCount() == 0) {
         $_SESSION["invalid_account"] = -1; //account inesistente
-        header("Location: login.php");
+        header("Location: login.php", true, 301);
         exit;
     } else {
         $id_password = $row_utente->Id_password;
@@ -121,14 +137,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["nome"])) {
             $_SESSION["visualizza_catalogo"] = true;
             //creazione del cookie per l'utente
             $nome_cookie = "carrello_articoli_per_" . $_SESSION["utente"];
-            if(!isset($_COOKIE[$nome_cookie])){
+            if (!isset($_COOKIE[$nome_cookie])) {
                 setcookie($nome_cookie, "vuoto", time() + (86400 * 30), "/");
             }
-            header("Location: ../dati_utente/utente.php?u=" . $_SESSION["utente"]);
+            header("Location: ../dati_utente/utente.php?u=" . $_SESSION["utente"], true, 301);
             exit;
         } else {
             $_SESSION["invalid_account"] = -1; //account inesistente
-            header("Location: login.php");
+            header("Location: login.php", true, 301);
             exit;
         }
     }

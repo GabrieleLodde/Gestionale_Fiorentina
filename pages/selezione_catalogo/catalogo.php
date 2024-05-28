@@ -14,8 +14,9 @@ if (isset($_SESSION["modifica_account"])) {
   }
 }
 
-if (!isset($_SESSION["invalid_prodotto"])) {
-  $_SESSION["invalid_prodotto"] = false;
+if (!isset($_SESSION["advise_credito"]) || !isset($_SESSION["advise_pagamento"])) {
+  $_SESSION["advise_credito"] = false;
+  $_SESSION["advise_pagamento"] = false;
 }
 
 
@@ -27,7 +28,7 @@ if ($_COOKIE[$nome_cookie] == "vuoto") {
 } else {
   //echo "SONO ENTRATO A SETTARE IL CONTATORE CON QUELLO CHE C'ERA<br><br>";
   $array_articoli_cookie = explode(",", $_COOKIE[$nome_cookie]);
-  $_SESSION["count_articoli"] = count($array_articoli_cookie);  
+  $_SESSION["count_articoli"] = count($array_articoli_cookie);
   $_SESSION["articoli"] = $array_articoli_cookie;
   //echo "HO RIPRESO GLI ARTICOLI DAL COOKIE<br><br>";
 }
@@ -78,9 +79,12 @@ $sth_articoli->execute();
 </head>
 
 <body <?php
-      if ($_SESSION["invalid_prodotto"] == true) {
-      ?> onload="printInvalidProdotto()" <?php
-                                        } ?>>
+      if ($_SESSION["advise_credito"] == true) {
+      ?> onload="printAdviseCredito()" <?php
+      } else if($_SESSION["advise_pagamento"] == true){
+        ?> onload="printAdvisePagamento()" <?php
+      }
+      ?>>
   <div class="site-wrap">
 
     <div class="site-mobile-menu site-navbar-target">
@@ -133,7 +137,7 @@ $sth_articoli->execute();
     <section class="py-5">
       <div class="container px-4 px-lg-5 mt-5">
         <form action="carrello.php" class="d-flex flex-row-reverse">
-          <button class="btn-outline-dark border border-white pl-3 pr-3 mb-5 custom-btn" type="submit">
+          <button class="btn-outline-dark border border-white pl-3 pr-3 mb-3 custom-btn" type="submit">
             <i class="bi-cart-fill me-1"></i>
             Visualizza carrello
             <span class="badge bg-dark text-white ms-1 rounded-pill">
@@ -144,6 +148,15 @@ $sth_articoli->execute();
           </button>
         </form>
         <?php
+        if($_SESSION["count_articoli"] != 0){ ?>
+          <form action="../selezione_pagamento/pagamento.php" class="d-flex flex-row-reverse">
+            <button class="btn-outline-dark border border-white pl-3 pr-3 mb-5 custom-btn" type="submit">
+              <i class="bi bi-credit-card"></i>
+              Procedi al pagamento
+            </button>
+          </form>
+          <?php            
+        }
         $num_articoli = $sth_articoli->rowCount();
         $count_articoli = 0;
         $count_per_riga = 0;
@@ -165,15 +178,30 @@ $sth_articoli->execute();
             ?>
             <div class="col mb-5">
               <div class="card h-100">
-                <?php
-                if ($row_articolo->Id_sconto != 4) { ?>
-                  <!-- Sale badge-->
-                  <div class="badge bg-dark text-white position-absolute mb-5 pt-2 pb-2 pl-2 pr-2" style="top: 0.5rem; right: 0.5rem">Sconto <?php echo $row_articolo->valore . "%" ?> !</div>
-                <?php
-                }
-                ?>
-                <!-- Product image-->
-                <img class="card-img-top" src="<?php echo $row_articolo->immagine ?>" alt="..." />
+                <div class="position-relative">
+                  <!-- Product image-->
+                  <img class="card-img-top" src="<?php echo $row_articolo->immagine ?>" alt="...">
+                  <!-- Badge on the image -->
+                  <div class="badge bg-secondary text-white position-absolute mb-5 pt-2 pb-2 pl-2 pr-2" style="bottom: 0.5rem; right: 0.5rem"><?php echo $row_articolo->tipo; 
+                  if($row_articolo->tipo == "UOMO"){ ?>
+                    <i class="bi bi-gender-male"></i>
+                  <?php
+                  } else if($row_articolo->tipo == "DONNA"){ ?>
+                    <i class="bi bi-gender-female"></i>
+                  <?php
+                  } else if($row_articolo->tipo == "BAMBINO"){ ?>
+                    <i class="bi-emoji-smile"></i>
+                  <?php
+                  } else if($row_articolo->tipo == "KIT GARA"){ ?>
+                    <i class="bi-trophy"></i>
+                  <?php
+                  }
+                  ?></div>
+                  <?php if ($row_articolo->Id_sconto != 4) { ?>
+                    <!-- Sale badge-->
+                    <div class="badge bg-dark text-white position-absolute mb-5 pt-2 pb-2 pl-2 pr-2" style="top: 0.5rem; right: 0.5rem">Sconto <?php echo $row_articolo->valore . "%" ?> !</div>
+                  <?php } ?>
+                </div>
                 <!-- Product details-->
                 <div class="card-body p-4">
                   <div class="text-center">
@@ -314,10 +342,16 @@ $sth_articoli->execute();
 
   <script src="../../js/main.js"></script>
   <script>
-    function printInvalidProdotto() {
-      alert("Per visualizzare un prodotto specifico devi selezionarlo!");
+    function printAdviseCredito() {
+      alert("Adesso hai 0€, pertanto non potrai più acquistare prodotti!");
       <?php
-      $_SESSION["invalid_prodotto"] = false;
+      $_SESSION["advise_credito"] = false;
+      ?>
+    }
+    function printAdvisePagamento() {
+      alert("Pagamento avvenuto con successo, forza viola!");
+      <?php
+      $_SESSION["advise_pagamento"] = false;
       ?>
     }
   </script>

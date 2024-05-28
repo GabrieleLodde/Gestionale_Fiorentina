@@ -33,6 +33,11 @@ Id_taglia INT AUTO_INCREMENT PRIMARY KEY,
 descrizione_taglia VARCHAR(17) NOT NULL
 );
 
+CREATE TABLE CapoAbbigliamento(
+Id_capo INT AUTO_INCREMENT PRIMARY KEY,
+tipo_capo VARCHAR(20) NOT NULL
+);
+
 CREATE TABLE Articolo(
 Id_articolo INT AUTO_INCREMENT PRIMARY KEY,
 descrizione_articolo VARCHAR(100) NOT NULL,
@@ -40,7 +45,9 @@ prezzo_base  DECIMAL(5, 2) NOT NULL,
 tipo VARCHAR(10) NOT NULL,
 Id_sconto INT NOT NULL,
 immagine VARCHAR(60) NOT NULL,
-FOREIGN KEY (Id_sconto) REFERENCES Sconto(Id_sconto)
+Id_capo INT NOT NULL,
+FOREIGN KEY (Id_sconto) REFERENCES Sconto(Id_sconto),
+FOREIGN KEY (Id_capo) REFERENCES CapoAbbigliamento(Id_capo)
 );
 
 CREATE TABLE ArticoloTaglia (
@@ -72,43 +79,51 @@ VALUES 	("XS"),
         ("XXL"),
         ("XXXL");
         
+-- Dump dei dati per i tipi di capo
+INSERT
+INTO CapoAbbigliamento(tipo_capo)
+VALUES 	("MAGLIA GARA"),
+		("KIT GARA"),
+		("PANTALONCINI"),
+        ("CALZETTONI");
+        
 -- Dump dei dati per gli articoli
 INSERT
-INTO Articolo(descrizione_articolo, prezzo_base, tipo, Id_sconto, immagine)
-VALUES 	("FIORENTINA MAGLIA GARA<br>HOME KOMBAT PRO 2024/25", 120.00, "UOMO", 4, "../../images/articoli/maglia_24-25.webp"),
-		("FIORENTINA MAGLIA GARA<br>HOME KOMBAT 2024/25", 85.00, "UOMO", 2, "../../images/articoli/maglia_normale_24-25.webp"),
-		("FIORENTINA KIT HOME 2024/25", 59.00, "KIT GARA", 4, "../../images/articoli/kit_24-25.webp"),
-        ("FIORENTINA PANTALONCINI GARA HOME 2024/25", 49.00, "KIT GARA", 2, "../../images/articoli/pantaloncini_24-25.webp"),
-        ("FIORENTINA CALZETTONI GARA HOME 2024/25", 15.00, "KIT GARA", 1, "../../images/articoli/calzettoni_24-25.webp"),
-        ("FIORENTINA MAGLIA GARA HOME DONNA<br>KOMBAT PRO 2024/25", 120.00, "DONNA", 2, "../../images/articoli/maglia_donna_24-25.webp"),
+INTO Articolo(descrizione_articolo, prezzo_base, tipo, Id_sconto, immagine, Id_capo)
+VALUES 	("FIORENTINA MAGLIA GARA<br>HOME KOMBAT PRO 2024/25", 120.00, "UOMO", 4, "../../images/articoli/maglia_24-25.webp", 1),
+		("FIORENTINA MAGLIA GARA<br>HOME KOMBAT 2024/25", 85.00, "UOMO", 2, "../../images/articoli/maglia_normale_24-25.webp", 1),
+		("FIORENTINA KIT HOME 2024/25", 59.00, "KIT GARA", 4, "../../images/articoli/kit_24-25.webp", 2),
+        ("FIORENTINA PANTALONCINI GARA HOME 2024/25", 49.00, "KIT GARA", 2, "../../images/articoli/pantaloncini_24-25.webp", 3),
+        ("FIORENTINA CALZETTONI GARA HOME 2024/25", 15.00, "KIT GARA", 1, "../../images/articoli/calzettoni_24-25.webp", 4),
+        ("FIORENTINA MAGLIA GARA HOME DONNA<br>KOMBAT PRO 2024/25", 120.00, "DONNA", 2, "../../images/articoli/maglia_donna_24-25.webp", 1),
         
-        ("FIORENTINA MAGLIA GARA<br>HOME KOMBAT PRO 2023/24", 69.00, "UOMO", 3, "../../images/articoli/maglia_23-24.webp"),
-        ("FIORENTINA MAGLIA GARA<br>HOME KOMBAT EXTRA 2023/24", 49.00, "UOMO", 1, "../../images/articoli/maglia_normale_23-24.webp"),
-        ("FIORENTINA KIT HOME 2023/24", 49.00, "KIT GARA", 4, "../../images/articoli/kit_23-24.webp"),
-        ("FIORENTINA PANTALONCINI GARA HOME 2023/24", 49.00, "KIT GARA", 3, "../../images/articoli/pantaloncini_23-24.webp"),
-        ("FIORENTINA CALZETTONI GARA HOME 2023/24", 15.00, "KIT GARA", 3, "../../images/articoli/calzettoni_23-24.webp"),
-        ("FIORENTINA MAGLIA GARA HOME DONNA<br>KOMBAT PRO 2023/24", 99.00, "DONNA", 3, "../../images/articoli/maglia_donna_23-24.webp"),
+        ("FIORENTINA MAGLIA GARA<br>HOME KOMBAT PRO 2023/24", 69.00, "UOMO", 3, "../../images/articoli/maglia_23-24.webp", 1),
+        ("FIORENTINA MAGLIA GARA<br>HOME KOMBAT EXTRA 2023/24", 49.00, "UOMO", 1, "../../images/articoli/maglia_normale_23-24.webp", 1),
+        ("FIORENTINA KIT HOME 2023/24", 49.00, "KIT GARA", 4, "../../images/articoli/kit_23-24.webp", 2),
+        ("FIORENTINA PANTALONCINI GARA HOME 2023/24", 49.00, "KIT GARA", 3, "../../images/articoli/pantaloncini_23-24.webp", 3),
+        ("FIORENTINA CALZETTONI GARA HOME 2023/24", 15.00, "KIT GARA", 3, "../../images/articoli/calzettoni_23-24.webp", 4),
+        ("FIORENTINA MAGLIA GARA HOME DONNA<br>KOMBAT PRO 2023/24", 99.00, "DONNA", 3, "../../images/articoli/maglia_donna_23-24.webp", 1),
         
-        ("FIORENTINA MAGLIA GARA<br>AWAY KOMBAT PRO <br>- EDIZIONE LIMITATA - FINALE ATENE 24", 115.00, "UOMO", 1, "../../images/articoli/maglia_atene_23-24.webp"),
-        ("FIORENTINA MAGLIA GARA<br>AWAY KOMBAT PRO 23/24", 99.00, "UOMO", 4, "../../images/articoli/maglia_away_23-24.webp"),
-        ("FIORENTINA MINIKIT<br>AWAY KOMBAT BAMBINO 23/24", 49.00, "KIT GARA", 3, "../../images/articoli/kit_away_23-24.webp"),
-        ("FIORENTINA PANTALONCINI GARA AWAY 2023/24", 49.00, "KIT GARA", 3, "../../images/articoli/pantaloncini_away_23-24.webp"),
-        ("FIORENTINA CALZETTONI GARA AWAY 2023/24", 15.00, "KIT GARA", 3, "../../images/articoli/calzettoni_away_23-24.webp"),
-        ("FIORENTINA MAGLIA GARA<br>AWAY KOMBAT PRO BAMBINO 23/24", 99.00, "BAMBINO", 4, "../../images/articoli/maglia_away_bambino_23-24.webp"),
+        ("FIORENTINA MAGLIA GARA<br>AWAY KOMBAT PRO <br>- EDIZIONE LIMITATA - FINALE ATENE 24", 115.00, "UOMO", 1, "../../images/articoli/maglia_atene_23-24.webp", 1),
+        ("FIORENTINA MAGLIA GARA<br>AWAY KOMBAT PRO 23/24", 99.00, "UOMO", 4, "../../images/articoli/maglia_away_23-24.webp", 1),
+        ("FIORENTINA MINIKIT<br>AWAY KOMBAT BAMBINO 23/24", 49.00, "KIT GARA", 3, "../../images/articoli/kit_away_23-24.webp", 2),
+        ("FIORENTINA PANTALONCINI GARA AWAY 2023/24", 49.00, "KIT GARA", 3, "../../images/articoli/pantaloncini_away_23-24.webp", 3),
+        ("FIORENTINA CALZETTONI GARA AWAY 2023/24", 15.00, "KIT GARA", 3, "../../images/articoli/calzettoni_away_23-24.webp", 4),
+        ("FIORENTINA MAGLIA GARA<br>AWAY KOMBAT PRO BAMBINO 23/24", 99.00, "BAMBINO", 4, "../../images/articoli/maglia_away_bambino_23-24.webp", 1),
         
-         ("FIORENTINA MAGLIA GARA<br>THIRD KOMBAT PRO 23/24", 99.00, "UOMO", 3, "../../images/articoli/maglia_third_23-24.webp"),
-         ("FIORENTINA MAGLIA GARA<br>THIRD KOMBAT EXTRA 23/24", 49.00, "UOMO", 4, "../../images/articoli/maglia_third_normale_23-24.webp"),
-         ("FIORENTINA MINIKIT<br>THIRD KOMBAT BAMBINO 23/24", 49.00, "KIT GARA", 4, "../../images/articoli/kit_third_23-24.webp"),
-         ("FIORENTINA PANTALONCINI GARA THIRD 2023/24", 49.00, "KIT GARA", 3, "../../images/articoli/pantaloncini_third_23-24.webp"),
-         ("FIORENTINA CALZETTONI GARA THIRD 2023/24", 15.00, "KIT GARA", 3, "../../images/articoli/calzettoni_third_23-24.webp"),
-         ("FIORENTINA MAGLIA GARA<br>THIRD KOMBAT PRO BAMBINO 23/24", 99.00, "BAMBINO", 4, "../../images/articoli/maglia_third_bambino_23-24.webp"),
+         ("FIORENTINA MAGLIA GARA<br>THIRD KOMBAT PRO 23/24", 99.00, "UOMO", 3, "../../images/articoli/maglia_third_23-24.webp", 1),
+         ("FIORENTINA MAGLIA GARA<br>THIRD KOMBAT EXTRA 23/24", 49.00, "UOMO", 4, "../../images/articoli/maglia_third_normale_23-24.webp", 1),
+         ("FIORENTINA MINIKIT<br>THIRD KOMBAT BAMBINO 23/24", 49.00, "KIT GARA", 4, "../../images/articoli/kit_third_23-24.webp", 2),
+         ("FIORENTINA PANTALONCINI GARA THIRD 2023/24", 49.00, "KIT GARA", 3, "../../images/articoli/pantaloncini_third_23-24.webp", 3),
+         ("FIORENTINA CALZETTONI GARA THIRD 2023/24", 15.00, "KIT GARA", 3, "../../images/articoli/calzettoni_third_23-24.webp", 4),
+         ("FIORENTINA MAGLIA GARA<br>THIRD KOMBAT PRO BAMBINO 23/24", 99.00, "BAMBINO", 4, "../../images/articoli/maglia_third_bambino_23-24.webp", 1),
         
-        ("FIORENTINA MAGLIA GARA<br>FOURTH KOMBAT PRO 2023/24", 99.00, "UOMO", 3, "../../images/articoli/maglia_fourth_23-24.webp"),
-        ("FIORENTINA MAGLIA GARA<br>FOURTH KOMBAT EXTRA 2023/24", 49.00, "UOMO", 4, "../../images/articoli/maglia_fourth_normale_23-24.webp"),
-        ("FIORENTINA MINIKIT<br>FOURTH KOMBAT 2023/24", 49.00, "KIT GARA", 4, "../../images/articoli/kit_fourth_23-24.webp"),
-        ("FIORENTINA PANTALONCINI GARA FOURTH 2023/24", 49.00, "KIT GARA", 3, "../../images/articoli/pantaloncini_fourth_23-24.webp"),
-        ("FIORENTINA MAGLIA GARA<br>FOURTH KOMBAT PRO BAMBINO 2023/24", 99.00, "BAMBINO", 4, "../../images/articoli/maglia_fourth_bambino_23-24.webp"),
-        ("FIORENTINA PANTALONCINI GARA<br>FOURTH BAMBINO 2023/24", 49.00, "BAMBINO", 3, "../../images/articoli/pantaloncini_fourth_bambino_23-24.webp");
+        ("FIORENTINA MAGLIA GARA<br>FOURTH KOMBAT PRO 2023/24", 99.00, "UOMO", 3, "../../images/articoli/maglia_fourth_23-24.webp", 1),
+        ("FIORENTINA MAGLIA GARA<br>FOURTH KOMBAT EXTRA 2023/24", 49.00, "UOMO", 4, "../../images/articoli/maglia_fourth_normale_23-24.webp", 1),
+        ("FIORENTINA MINIKIT<br>FOURTH KOMBAT 2023/24", 49.00, "KIT GARA", 4, "../../images/articoli/kit_fourth_23-24.webp", 2),
+        ("FIORENTINA PANTALONCINI GARA FOURTH 2023/24", 49.00, "KIT GARA", 3, "../../images/articoli/pantaloncini_fourth_23-24.webp", 3),
+        ("FIORENTINA MAGLIA GARA<br>FOURTH KOMBAT PRO BAMBINO 2023/24", 99.00, "BAMBINO", 4, "../../images/articoli/maglia_fourth_bambino_23-24.webp", 1),
+        ("FIORENTINA PANTALONCINI GARA<br>FOURTH BAMBINO 2023/24", 49.00, "BAMBINO", 3, "../../images/articoli/pantaloncini_fourth_bambino_23-24.webp", 3);
         
 	
 -- Dump dei dati per le taglie degli articoli
