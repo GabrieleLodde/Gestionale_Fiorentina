@@ -844,7 +844,7 @@ h1, h2, h3, h4, h5,
     font-weight: 700; }
 
 .widget-vs-contents {
-  background:color-mix(in hsl shorter hue, red 50%, purple 50%);
+  background:color-mix(in hsl shorter hue, blue 60%, purple 40%);
   padding-bottom: 0px; }
   .widget-vs-contents h4 {
     color: lightyellow;

@@ -108,7 +108,7 @@ if(isset($_SESSION["modifica_account"])){
             <p class="mt-5">
               <a href="#ultima" class="btn btn-primary py-3 px-4 mr-3">Ultima partita</a>
               <a href="#eventi" class="btn btn-primary py-3 px-4 mr-3">Eventi principali</a>
-              <a href="#imminente" class="btn btn-primary py-3 px-4 mr-3">Evento imminente</a>
+              <a href="#campionato" class="btn btn-primary py-3 px-4 mr-3">Campionato 2024/25</a>
               <a href="#notizie" class="btn btn-primary py-3 px-4 mr-3">Ultime notizie</a>
             </p>
           </div>
@@ -235,40 +235,40 @@ if(isset($_SESSION["modifica_account"])){
 
     <div class="site-section bg-dark">
       <div class="container">
-        <div class="row d-flex justify-content-center" id="imminente">
+        <div class="row d-flex justify-content-center" id="campionato">
           <div class="col-12 title-section">
-            <h2 class="heading"><a href="#" class="text-white">Evento imminente</a></h2>
+            <h2 class="heading"><a href="#" class="text-white">Campionato 2024/25</a></h2>
           </div>
           <div class="col-lg-6">
-            <div class="widget-next-match" style="background-image:url(images/conference.png)">
+            <div class="widget-next-match" style="background-image:url(images/serie_a.jpg)">
               <div class="widget-body mb-3">
                 <div class="widget-vs">
                   <div class="d-flex align-items-center justify-content-around justify-content-between w-100">
                     <div class="team-1 text-center">
-                      <a target="_blank" href="images/logo_olympiacos.png">
-                        <img src="images/logo_olympiacos.png" alt="Image">
+                      <a target="_blank" href="images/logo_Inter.png">
+                        <img src="images/Logo_Inter.png" alt="Image">
                       </a>
-                      <h3>Olympiacos</h3>
+                      <h3>Inter</h3>
                     </div>
                     <div>
                       <span class="vs"><span>VS</span></span>
                     </div>
                     <div class="team-2 text-center">
-                      <a target="_blank" href="images/logo_fiorentina.png">
-                        <img src="images/logo_fiorentina.png" alt="Image">
+                      <a target="_blank" href="images/Logo_casuale.png">
+                        <img src="images/Logo_casuale.png" alt="Image">
                       </a>
-                      <h3>Fiorentina</h3>
+                      <h3>Squadra casuale</h3>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div class="text-center widget-vs-contents mb-4">
-                <h2 class="fw-bold"><b>Finale Conference League</b></h2>
+                <h2 class="fw-bold"><b>Inizio campionato 2024/25</b></h2>
                 <p class="mb-5 pt-2 pb-1">
-                  <span class="d-block text-white h4"><b>29 Maggio 2024</b></span>
-                  <span class="d-block text-white h4"><b>21:00 CET</b></span>
-                  <span class="d-block text-white h4"><b>AEK Arena, Atene</b></span>
+                  <span class="d-block text-white h4"><b>17 Agosto 2024</b></span>
+                  <span class="d-block text-white h4"><b>15:00 CET</b></span>
+                  <span class="d-block text-white h4"><b>Stadio San Siro, Milano</b></span>
                 </p>
               </div>
               <div id="countdown"></div>

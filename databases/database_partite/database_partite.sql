@@ -31,11 +31,11 @@ ON DELETE CASCADE ON UPDATE CASCADE);
 
 INSERT 
 INTO Squadre(nome, logo_squadra, partite_giocate, vittorie, pareggi, sconfitte, goal_fatti, goal_subiti, differenza_reti, numero_punti, ordine_punti_uguali)
-VALUES	("Atalanta", "loghi/Logo_Atalanta.png", 37, 21, 6, 10, 70, 39, 31, 69, 0),
+VALUES	("Atalanta", "loghi/Logo_Atalanta.png", 38, 21, 6, 11, 72, 42, 30, 69, 0),
 		("Bologna", "loghi/Logo_Bologna.png", 38, 18, 14, 6, 54, 32, 22, 68, 0),
         ("Cagliari", "loghi/Logo_Cagliari.png", 38, 8, 12, 18, 42, 68, -26, 36, 5),
         ("Empoli", "loghi/Logo_Empoli.png", 38, 9, 9, 20, 29, 54, -25, 36, 6),
-        ("Fiorentina", "loghi/Logo_Fiorentina.png", 37, 16, 9, 12, 58, 44, 14, 57, 0),
+        ("Fiorentina", "loghi/Logo_Fiorentina.png", 38, 17, 9, 12, 61, 46, 15, 60, 0),
         ("Frosinone", "loghi/Logo_Frosinone.png", 38, 8, 11, 19, 44, 69, -25, 35, 0),
         ("Genoa", "loghi/Logo_Genoa.png", 38, 12, 13, 13, 45, 45, 0, 49, 0),
         ("Inter", "loghi/Logo_Inter.png", 38, 29, 7, 2, 89, 22, 67, 94, 0),
@@ -402,7 +402,7 @@ VALUES
 		(20, 12, 1, 3, "../../images/verona_milan.jpg", "https://www.youtube.com/watch?v=PorglYRTVAE&pp=ygUQdmVyb25hIG1pbGFuIDEgMw%3D%3D"),
 		(15, 17, 1, 0, "../../images/roma_sassuolo.jpg", "https://www.youtube.com/watch?v=-wDlLm2O1VQ&pp=ygURcm9tYSBzYXNzdW9sbyAxIDA%3D"),
 		(8, 14, 1, 1, "../../images/inter_napoli.jpg", "https://www.youtube.com/watch?v=y228D0hP5Pk&pp=ygURaW50ZXIgbmFwb2xpIDEgMSA%3D"),
-        -- (1, 5, ----, ----, "../../images/atalanta_fiorentina.jpg", "")
+		(1, 5, 2, 3, "../../images/atalanta_fiorentina.jpg", "https://www.youtube.com/watch?v=WDq3iTG9egc&pp=ygUXYXRhbGFudGEgZmlvcmVudGluYSAyIDM%3D"),
         
         -- TRENTESIMA GIORNATA
         (14, 1, 0, 3, "../../images/napoli_atalanta.jpg", "https://www.youtube.com/watch?v=T-ciM_wEWKM&pp=ygUdbmFwb2xpIGF0YWxhbnRhIDAgMyBzc2NuYXBvbGk%3D"),
